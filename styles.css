@@ -1,0 +1,1069 @@
+:root {
+  --black: #030506;
+  --dark: #071014;
+  --deep: #061820;
+  --white: #f7f7f7;
+  --muted: #b9c2c8;
+  --cyan: #12b8d5;
+  --orange: #ff8a00;
+  --line: rgba(141, 230, 255, 0.28);
+  --max: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--white);
+  background: var(--black);
+  font-family:
+    "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.michroma-regular {
+  font-family: "Michroma", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.container {
+  width: min(var(--max), calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 10;
+}
+
+.header-inner {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-transform: uppercase;
+}
+
+.brand-kicker {
+  color: var(--orange);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.brand strong {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 56px;
+  color: #dfe8ec;
+  font-size: 15px;
+}
+
+.header-btn,
+.main-btn,
+.orange-btn {
+  /* min-width: 142px;
+  min-height: 54px; */
+  padding: 10px 18px 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #fff;
+  background: var(--cyan);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.main-btn,
+.orange-btn {
+  padding: 24px 54px 22px;
+  width: 280px;
+  border-radius: 16px;
+}
+
+.hero {
+  position: relative;
+  min-height: 1185px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  /* background:
+    radial-gradient(
+      circle at 52% 42%,
+      rgba(28, 117, 159, 0.3),
+      transparent 19%
+    ),
+    radial-gradient(
+      circle at 72% 12%,
+      rgba(49, 196, 221, 0.28),
+      transparent 16%
+    ),
+    radial-gradient(
+      circle at 24% 76%,
+      rgba(44, 176, 218, 0.24),
+      transparent 22%
+    ),
+    #020303; */
+  background: url("./assets/DSK2026_BG.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.hero::before {
+  left: 0;
+  top: 115px;
+  width: min(36vw, 480px);
+  height: 426px;
+  background: url("./assets/hero-left.png") left top / contain no-repeat;
+}
+
+.hero::after {
+  right: 0;
+  bottom: 0px;
+  width: min(36vw, 480px);
+  height: 580px;
+  background: url("./assets/hero-right.png") right bottom / contain no-repeat;
+}
+
+.orb {
+  position: absolute;
+  border: 2px solid rgba(74, 209, 242, 0.42);
+  border-radius: 50%;
+  filter: blur(0.2px);
+  opacity: 0.55;
+}
+
+.orb-left {
+  width: 840px;
+  height: 840px;
+  left: -280px;
+  bottom: -420px;
+}
+
+.orb-right {
+  width: 980px;
+  height: 980px;
+  right: -280px;
+  top: -130px;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  padding-top: 72px;
+}
+
+.year {
+  margin: 0 0 28px;
+  font-size: clamp(36px, 4vw, 66px);
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: clamp(54px, 7vw, 110px);
+  line-height: 1.18;
+}
+
+h2 {
+  font-size: clamp(48px, 5vw, 82px);
+  line-height: 1.04;
+}
+
+.hero-accent {
+  margin: 48px 0 14px;
+  color: var(--orange);
+  font-size: clamp(21px, 2.1vw, 32px);
+  font-weight: 900;
+}
+
+.hero-copy {
+  margin: 0;
+  color: #f1f5f6;
+  font-size: 18px;
+}
+
+.countdown {
+  width: min(860px, 100%);
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 30px;
+  margin: 194px auto 72px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(71, 76, 80, 0.86);
+  padding: 16px 48px;
+}
+.countdown > span {
+  color: #f4f4f4;
+  font-weight: 700;
+}
+
+.countdown strong {
+  display: grid;
+  gap: 2px;
+  color: #fff;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.countdown small {
+  color: #d5d8da;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.countdown a {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: var(--cyan);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+/* 사전등록 마감까지 텍스트 영역 */
+.countdown > span:first-child {
+  margin-right: 40px; /* 숫자 영역과 간격 넓히기 */
+
+  color: var(--dksSUB, #98c3cc);
+  text-align: center;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* 숫자와 단위를 묶는 블록 */
+.countdown .time-block {
+  display: flex;
+  flex-direction: column; /* 세로로 배치 */
+  align-items: center;
+  gap: 8px; /* 숫자와 단위 사이 간격 */
+  min-width: 60px; /* 블록 너비 고정하여 글자 바뀔 때 흔들림 방지 */
+}
+
+.countdown .time-block strong {
+  color: #fff;
+  font-size: 38px; /* 숫자 크기 키움 */
+  line-height: 1;
+}
+
+.countdown .time-block small {
+  color: #8f969c; /* 단위 글자색 어둡게 */
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 콜론(:) 구분자 스타일 */
+.countdown .separator {
+  color: #8f969c;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px; /* 단위를 피해 숫자 높이에 맞추기 위한 여백 */
+}
+
+.venue {
+  margin: 0;
+  font-size: 40px;
+  text-transform: uppercase;
+  background: var(
+    --dksGRADIANT,
+    linear-gradient(90deg, #f08200 19.71%, #f4dabc 50.96%, #0cabcf 82.21%)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 24px 8px;
+  text-align: center;
+}
+
+.venue::first-line {
+  color: var(--orange);
+}
+
+.social-strip {
+  padding: 118px 0;
+  color: #111;
+  background: #f5f5f5;
+  text-align: center;
+}
+
+.social-strip p {
+  margin: 0 0 32px;
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 38px;
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.section {
+  padding: 145px 0;
+}
+
+.why {
+  /* background:
+    radial-gradient(circle at 58% 8%, rgba(17, 78, 112, 0.42), transparent 24%),
+    #030506; */
+
+  background: url("./assets/why.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.why h2 span {
+  font-size: 0.56em;
+}
+
+.reason-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 485px;
+}
+
+.reason-grid img {
+  padding-bottom: 24px;
+}
+
+.reason-grid h3 {
+  min-height: 72px;
+  margin: 0 0 16px;
+  color: var(--orange);
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.reason-grid p,
+.tickets > .container > p,
+.booths > .container > p,
+.faq p {
+  color: #d8e0e3;
+}
+
+.speakers {
+  background:
+    linear-gradient(90deg, #030506, rgba(3, 5, 6, 0.85)),
+    radial-gradient(
+      circle at 72% 12%,
+      rgba(12, 116, 153, 0.36),
+      transparent 30%
+    );
+}
+
+/* 1. 부모 레이아웃 설정 (왼쪽 고정, 오른쪽 화면 끝까지) */
+.container.speaker-layout {
+  width: auto;
+  max-width: none;
+
+  margin-left: max(24px, calc(50vw - 600px));
+  margin-right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+/* 2. 왼쪽 타이틀 영역 너비 유지 */
+.speaker-layout > div:first-child {
+  flex: 0 0 auto;
+}
+/* 
+.speaker-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 90px;
+  align-items: center;
+} */
+
+/* 1. 부모 레이아웃 설정 (왼쪽: 타이틀/동전, 오른쪽: 슬라이드) */
+.speaker-layout {
+  display: flex;
+  align-items: center; /* 또는 디자인에 따라 flex-start */
+  justify-content: space-between;
+  gap: 40px; /* 좌우 간격 */
+}
+
+.speaker-coins {
+  height: 280px;
+  margin-top: 96px;
+  background: url("./assets/speaker-coins.png") left center / contain no-repeat;
+}
+
+.speaker-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  overflow: hidden;
+}
+
+.speaker-cards article {
+  position: relative;
+  min-height: 540px;
+  overflow: hidden;
+  border-radius: 13px;
+  background: #0b171d;
+  width: 486px;
+}
+
+.speaker-cards img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.speaker-cards article::after {
+  content: "";
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, rgba(0, 180, 218, 0.86));
+}
+
+.speaker-cards .muted {
+  opacity: 0.42;
+}
+
+.speaker-cards div {
+  position: absolute;
+  z-index: 2;
+  left: 34px;
+  bottom: 34px;
+}
+
+.speaker-cards h3 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.speaker-cards p {
+  margin: 0;
+}
+
+/* 2. Swiper 컨테이너 설정 */
+.speakerSwiper {
+  width: 100%;
+  max-width: none; /* 이전에 추가했던 max-width(예: 800px)를 지워서 끝까지 뻗어나가게 합니다 */
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+
+/* 3. Swiper 슬라이드 및 내부 아티클 설정 */
+.speakerSwiper .swiper-slide article {
+  position: relative; /* 자식 요소(speaker-info) 절대 위치 기준점 */
+  border-radius: 12px; /* 디자인에 맞는 둥근 모서리 */
+  overflow: hidden;
+}
+
+.speakerSwiper .swiper-slide article img {
+  width: 100%;
+  display: block;
+  height: auto;
+}
+
+/* 4. 슬라이드 투명도 및 전환 효과 */
+.speakerSwiper .swiper-slide {
+  opacity: 0.4; /* 비활성 이미지는 어둡게 */
+  transition: opacity 0.4s ease-in-out;
+}
+
+.speakerSwiper .swiper-slide.swiper-slide-active {
+  opacity: 1; /* 활성 이미지는 밝게 */
+}
+
+/* 5. 이름 정보 레이어 (그라데이션 배경 및 텍스트) */
+.speakerSwiper .speaker-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  /* 하단 어두운 그라데이션 추가 (디자인에 맞게 수정) */
+  background: linear-gradient(to top, rgba(0, 168, 255, 0.8), transparent);
+  color: white;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.4s ease-in-out,
+    visibility 0.4s;
+  box-sizing: border-box;
+}
+
+/* 활성화된 슬라이드에만 정보 표시 */
+.speakerSwiper .swiper-slide.swiper-slide-active .speaker-info {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 텍스트 스타일 (필요시 조정) */
+.speakerSwiper .speaker-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.speakerSwiper .speaker-info p {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* 반응형 (모바일에서 세로 배치로 변경) */
+@media (max-width: 768px) {
+  .speaker-layout {
+    flex-direction: column; /* 모바일에서는 위아래로 배치 */
+  }
+}
+
+.tickets {
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  /* background:
+    radial-gradient(
+      ellipse at 84% 42%,
+      rgba(18, 184, 213, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(
+      130deg,
+      transparent 0 46%,
+      rgba(16, 82, 118, 0.22) 46% 55%,
+      transparent 55%
+    ),
+    #030506; */
+  background: url("./assets/tickets.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* .tickets::before,
+.tickets::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid rgba(91, 220, 242, 0.28);
+  border-radius: 50%;
+} */
+
+/* .tickets::before {
+  width: 980px;
+  height: 980px;
+  left: -420px;
+  bottom: -520px;
+}
+
+.tickets::after {
+  width: 760px;
+  height: 760px;
+  right: -280px;
+  bottom: -230px;
+} */
+
+.tickets .container {
+  position: relative;
+  z-index: 1;
+}
+
+.ticket-card {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  margin-top: 110px;
+}
+
+.ticket-card span {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 24px;
+  letter-spacing: 0.32em;
+}
+
+.ticket-card h3 {
+  margin: 0 0 58px;
+  font-size: 36px;
+  line-height: 1.16;
+  text-transform: uppercase;
+}
+
+.ticket-card p {
+  margin: 0;
+  color: #b7c1ca;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.18;
+  text-transform: uppercase;
+}
+
+.ticket-card strong {
+  font-size: 48px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ticket-card small {
+  font-size: 26px;
+}
+
+.tickets .main-btn,
+.history-link {
+  display: flex;
+  width: 280px;
+  margin: 0 auto;
+}
+
+.history-link {
+  justify-content: center;
+  margin-top: 24px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.partners {
+  padding-top: 80px;
+  text-align: center;
+}
+
+.partner-title {
+  margin: 0 0 24px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.partner-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  margin-bottom: 72px;
+}
+
+.partner-row.primary {
+  width: min(480px, 100%);
+  grid-template-columns: repeat(2, 1fr);
+  margin-inline: auto;
+}
+
+.partner-row span {
+  min-height: 82px;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  border-radius: 9px;
+  background: #232629;
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.booths {
+  background: linear-gradient(180deg, #030506 0%, #08202b 100%);
+}
+
+.booth-grid {
+  margin: 112px 0 94px;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.booth-grid img {
+  object-fit: contain;
+}
+
+.booth-grid h3 {
+  margin: 22px 0 0;
+  font-size: 20px;
+}
+
+.booth-actions {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.orange-btn {
+  background: var(--orange);
+}
+
+.faq {
+  background: #282828;
+}
+
+.faq-layout {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  gap: 150px;
+}
+
+.faq-list {
+  display: grid;
+  gap: 42px;
+}
+
+.faq-list article {
+  padding-bottom: 28px;
+}
+.faq-list article h3 {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  padding-bottom: 16px;
+}
+
+.faq h3 {
+  margin: 0 0 24px;
+  font-size: 20px;
+}
+
+.faq p {
+  margin: 0;
+}
+
+.site-footer {
+  border-top: 0.5px solid var(--dksG80, #575d66);
+  padding: 70px 0 48px;
+  background: #282828;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.footer-inner .social-icons img {
+  filter: invert(100%);
+}
+
+.copyright {
+  padding-top: 28px;
+  color: #c4c4c4;
+}
+
+@media (max-width: 1024px) {
+  .nav {
+    gap: 28px;
+  }
+
+  .countdown {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .countdown > span,
+  .countdown a {
+    grid-column: span 4;
+    min-height: 58px;
+  }
+
+  .speaker-layout,
+  .faq-layout {
+    grid-template-columns: 1fr;
+    gap: 70px;
+  }
+
+  .reason-grid,
+  .booth-grid {
+    gap: 34px;
+  }
+
+  .partner-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .container {
+    width: min(100% - 32px, var(--max));
+  }
+
+  h2 {
+    font-size: 36px !important;
+  }
+
+  .site-header {
+    position: relative;
+    background: #030506;
+  }
+
+  .header-inner {
+    min-height: auto;
+    flex-wrap: wrap;
+    padding: 18px 0;
+    gap: 18px;
+  }
+
+  .brand strong {
+    font-size: 24px;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 14px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+
+  .header-btn {
+    min-width: 112px;
+    min-height: 42px;
+  }
+
+  .hero {
+    min-height: 820px;
+    align-items: start;
+    padding: 76px 0 64px;
+  }
+
+  .hero::before {
+    width: 210px;
+    top: 34px;
+    opacity: 0.78;
+  }
+
+  .hero::after {
+    width: 220px;
+    bottom: 145px;
+    opacity: 0.72;
+  }
+
+  .orb-left,
+  .orb-right {
+    display: none;
+  }
+
+  .year {
+    margin-top: 64px;
+    font-size: 30px;
+  }
+
+  h1 {
+    font-size: clamp(42px, 13vw, 58px);
+  }
+
+  .hero-accent {
+    margin-top: 34px;
+    font-size: 20px;
+  }
+
+  .hero-copy {
+    font-size: 15px;
+  }
+
+  .countdown {
+    flex-wrap: wrap; /* 여러 줄로 나눔 */
+    padding: 24px;
+  }
+
+  .countdown > span:first-child {
+    width: 100%; /* 제목을 위로 올림 */
+    text-align: center;
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+
+  .countdown > span,
+  .countdown a {
+    grid-column: span 2;
+  }
+
+  .venue {
+    font-size: 24px;
+  }
+
+  .social-strip,
+  .section {
+    padding: 84px 0;
+  }
+
+  .why {
+    background: url("./assets/why-m.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .why .michroma-regular {
+    margin-top: 170px;
+  }
+
+  .why-visual {
+    height: 190px;
+  }
+
+  .reason-grid,
+  .speaker-cards,
+  .booth-grid,
+  .partner-row,
+  .partner-row.primary {
+    grid-template-columns: 1fr;
+  }
+
+  .reason-grid h3 {
+    min-height: auto;
+  }
+
+  .reason-grid {
+    margin-top: 20px;
+  }
+
+  .speaker-coins {
+    height: 180px;
+    margin-top: 46px;
+  }
+
+  .speaker-cards article {
+    min-height: 360px;
+  }
+
+  /* .speaker-layout > div:first-child {
+    width: 100%;
+    max-width: 100%;
+  } */
+  .speaker-layout > div:first-child,
+  .speakerSwiper {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* .container.speaker-layout {
+    width: min(100% - 32px) !important;
+    max-width: 100%;
+    margin: 0 auto !important;
+    padding: 0;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden; 
+  } */
+
+  .container.speaker-layout {
+    width: calc(
+      100% - 32px
+    ) !important; /* 모바일 양옆 여백(16px씩) 다시 확보 */
+    margin-left: auto !important; /* 밀어냈던 마진을 원래대로(중앙정렬) 복구 */
+    margin-right: auto !important; /* 0으로 만들었던 우측 마진 복구 */
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .speakerSwiper {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ticket-card {
+    min-height: auto;
+    display: grid;
+    margin-top: 58px;
+    border-radius: 20px;
+  }
+
+  .ticket-card h3 {
+    margin-bottom: 34px;
+    font-size: 28px;
+  }
+
+  .ticket-card strong {
+    font-size: 38px;
+  }
+
+  .ticket-card img {
+    width: 100%;
+  }
+
+  .booths {
+    background: var(--dksBK, #010101);
+  }
+
+  .booth-grid {
+    margin: 70px 0;
+    flex-direction: column;
+  }
+
+  .booth-actions,
+  .footer-inner {
+    display: grid;
+    gap: 18px;
+  }
+
+  .main-btn,
+  .orange-btn {
+    width: 100%;
+  }
+
+  .footer-inner {
+    justify-items: start;
+  }
+
+  .reason-grid img {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .countdown strong {
+    font-size: 26px;
+  }
+
+  .social-icons {
+    gap: 24px;
+  }
+}
