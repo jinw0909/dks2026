@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
 :root {
   --black: #030506;
   --dark: #071014;
@@ -69,12 +71,15 @@ a {
   backdrop-filter: blur(10px);
 }
 
+.header-inner .brand {
+  margin-left: 100px;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 9px;
   text-transform: uppercase;
-  margin-left: 100px;
 }
 
 .brand-kicker {
@@ -376,8 +381,16 @@ h2 {
 
 .social-strip p {
   margin: 0 0 32px;
-  font-size: 21px;
-  font-weight: 900;
+
+  color: var(--dksBK, #010101);
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.social-strip p strong {
+  font-weight: 700;
 }
 
 .social-icons {
@@ -722,9 +735,14 @@ h2 {
 
 .partner-title {
   margin: 0 0 24px;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 800;
+
+  color: var(--dksWH, #fafafa);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .partner-row {
@@ -754,6 +772,18 @@ h2 {
 
 .booths {
   background: linear-gradient(180deg, #030506 70%, #08202b 100%);
+}
+
+.booths h2 {
+  color: var(--dksWH, #fafafa);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: var(--dksWH, #fafafa);
+  font-family: Pretendard;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 99.995%; /* 63.997px */
+  letter-spacing: -0.64px;
 }
 
 .booth-grid {
@@ -962,7 +992,7 @@ h2 {
     gap: 18px;
   }
 
-  .brand {
+  .header-inner .brand {
     margin-left: 0;
   }
 
