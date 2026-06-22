@@ -49,12 +49,24 @@ a {
   z-index: 10;
 }
 
+/* .header-inner {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  width: 100% !important;
+  background: rgba(4, 17, 27, 0.2);
+  backdrop-filter: blur(10px);
+} */
+
 .header-inner {
   min-height: 74px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 40px;
+  position: relative; /* nav 중앙 정렬의 기준점이 됩니다 */
+
+  width: 100% !important;
+  background: rgba(4, 17, 27, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .brand {
@@ -78,11 +90,29 @@ a {
   letter-spacing: 0;
 }
 
-.nav {
+/* .nav {
   display: flex;
   gap: 56px;
   color: #dfe8ec;
   font-size: 15px;
+} */
+
+.nav {
+  display: flex;
+  gap: 56px;
+  font-size: 15px;
+
+  position: absolute; /* 추가 */
+  left: 50%; /* 추가 */
+  transform: translateX(-50%);
+}
+
+.nav a {
+  color: #a1b4c9;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
 }
 
 .header-btn,
@@ -219,14 +249,20 @@ h2 {
 .hero-accent {
   margin: 48px 0 14px;
   color: var(--orange);
-  font-size: clamp(21px, 2.1vw, 32px);
-  font-weight: 900;
+  font-size: 32px;
+  font-weight: 700;
 }
 
 .hero-copy {
   margin: 0;
-  color: #f1f5f6;
-  font-size: 18px;
+
+  color: var(--dskG60, #dee2e8);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .countdown {
@@ -384,9 +420,13 @@ h2 {
 .reason-grid h3 {
   min-height: 72px;
   margin: 0 0 16px;
-  color: var(--orange);
+  color: #fafafa;
   font-size: 20px;
   line-height: 1.35;
+}
+
+.reason-grid h3 strong {
+  color: var(--dksORANGE, #f08200);
 }
 
 .reason-grid p,
@@ -712,7 +752,7 @@ h2 {
 }
 
 .booths {
-  background: linear-gradient(180deg, #030506 0%, #08202b 100%);
+  background: linear-gradient(180deg, #030506 70%, #08202b 100%);
 }
 
 .booth-grid {
@@ -788,6 +828,36 @@ h2 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
+.company-info {
+  text-align: left;
+
+  color: var(--dskG60, #dee2e8);
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%; /* 22.4px */
+  letter-spacing: -0.28px;
+}
+
+.company-info p {
+  margin: 0 0 4px; /* 문단 사이 여백 조절 */
+}
+
+.company-info p strong {
+  font-weight: 700;
+}
+
+/* 구분선(|) 스타일 */
+.company-info span {
+  margin: 0 10px; /* 구분선 양옆 간격 */
+  opacity: 0.4; /* 선을 조금 연하게 */
+}
+
+.footer-inner .social-icons {
+  gap: 24px; /* 시안처럼 아이콘 사이 간격 조절 */
+}
+
 .footer-inner .social-icons img {
   filter: invert(100%);
 }
@@ -795,6 +865,10 @@ h2 {
 .copyright {
   padding-top: 28px;
   color: #c4c4c4;
+}
+
+.copyright p {
+  margin: 0;
 }
 
 @media (max-width: 1024px) {
@@ -823,8 +897,46 @@ h2 {
     gap: 34px;
   }
 
+  .reason-grid {
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: none;
+    margin-top: 100px;
+  }
+
   .partner-row {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why {
+    background-position: top;
+    background-size: 100%;
+  }
+
+  .ticket-card img {
+    width: 100%;
+  }
+
+  .booth-grid img {
+    object-fit: contain;
+    max-width: 100%; /* 부모(혹은 자신에게 할당된 공간) 너비를 넘지 않도록 제한 */
+    height: auto; /* 비율에 맞게 높이 자동 조절 */
+  }
+
+  .footer-inner {
+    flex-direction: column; /* 세로로 배치 */
+    align-items: flex-start; /* 모바일에서는 좌측 정렬 */
+    text-align: left;
+    gap: 30px; /* 세로 간격 넉넉히 */
+  }
+
+  .company-info {
+    text-align: left; /* 회사 정보도 좌측 정렬 */
+    flex: auto;
+  }
+
+  .company-info span {
+    /* 모바일에서 공간 부족 시 구분선을 감추고 줄바꿈으로 처리하고 싶다면 아래 코드 활성화 */
+    /* display: none; */
   }
 }
 
