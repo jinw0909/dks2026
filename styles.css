@@ -1833,7 +1833,7 @@ html {
     align-items: center;
     gap: 14px;
     margin-top: 18px;
-    /*display: none;*/
+    display: none;
 }
 
 .ticket-actions .main-btn,
