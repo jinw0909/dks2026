@@ -1925,6 +1925,7 @@ body.speaker-modal-open {
     display: flex;
     justify-content: center;
     gap: 18px;
+    display: none;
 }
 
 .booth-actions .main-btn,
