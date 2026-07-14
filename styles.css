@@ -81,8 +81,13 @@ a {
     margin-left: 100px;
 }
 
+.header-inner .brand img {
+    max-width: 100%;
+    height: auto;
+}
+
 .brand {
-    display: inline-flex;
+    display: block;
     align-items: center;
     gap: 9px;
     text-transform: uppercase;
@@ -1016,9 +1021,13 @@ h2 {
         overflow-x: auto;
         font-size: 13px;
         margin-top: 80px;
-        padding: 16px 10px;
+        padding: 12px;
 
         background-color: #030506;
+    }
+
+    .nav a {
+        font-size: 12px;
     }
 
     .header-btn {
@@ -1273,10 +1282,6 @@ h2 {
 
 html {
     scrollbar-gutter: stable;
-}
-
-body.speaker-modal-open {
-    overflow-y: scroll;
 }
 
 .speakers {
@@ -1828,7 +1833,7 @@ body.speaker-modal-open {
     align-items: center;
     gap: 14px;
     margin-top: 18px;
-    display: none;
+    /*display: none;*/
 }
 
 .ticket-actions .main-btn,
@@ -2727,5 +2732,513 @@ body {
         line-height: 1.25;
         letter-spacing: -0.045em;
         white-space: normal;
+    }
+}
+
+/* ==============================
+   Payment history modal
+============================== */
+
+.history-link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.payment-history-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 18px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+            opacity 180ms ease,
+            visibility 180ms ease;
+}
+
+.payment-history-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.payment-history-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 5, 8, 0.84);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.payment-history-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(620px, 100%);
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid rgba(18, 184, 213, 0.42);
+    border-radius: 8px;
+    background: #020303;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.72);
+}
+
+.payment-history-close {
+    position: absolute;
+    top: 14px;
+    right: 17px;
+    z-index: 4;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #607589;
+    font-size: 31px;
+    cursor: pointer;
+}
+
+.payment-history-brand {
+    padding: 34px 28px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+}
+
+.payment-history-year {
+    display: block;
+    margin-bottom: 7px;
+    color: #8797a9;
+    font-size: 15px;
+    letter-spacing: 0.32em;
+    text-indent: 0.32em;
+}
+
+.payment-history-logo {
+    display: inline-block;
+    max-width: 100%;
+    background: linear-gradient(
+            90deg,
+            #f08200 19.71%,
+            #f4dabc 50.96%,
+            #0cabcf 82.21%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    font-size: clamp(18px, 2.55vw, 27px);
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+}
+
+.payment-history-brand small {
+    display: block;
+    margin-top: 11px;
+    color: #94a0aa;
+    font-size: 11px;
+}
+
+.payment-history-intro,
+.payment-history-result-intro {
+    padding: 24px 36px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+            radial-gradient(
+                    circle at 70% 50%,
+                    rgba(18, 184, 213, 0.18),
+                    transparent 55%
+            ),
+            #031116;
+    text-align: center;
+}
+
+.payment-history-intro h2,
+.payment-history-result-intro h2,
+.payment-history-empty h2 {
+    margin: 0;
+    font-family: Pretendard, sans-serif;
+    font-size: 26px;
+    text-transform: none;
+}
+
+.payment-history-intro p,
+.payment-history-result-intro p {
+    margin: 12px 0 0;
+    color: #c6d0d5;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.payment-history-result-intro strong {
+    color: #ff9b00;
+}
+
+.payment-history-form {
+    padding: 30px 42px 42px;
+}
+
+.payment-history-field {
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.payment-history-field > span {
+    color: #d7dde1;
+    font-size: 14px;
+}
+
+.payment-history-field input {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    outline: none;
+    background: #050708;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.payment-history-field input:focus {
+    border-color: #12b8d5;
+}
+
+.payment-history-error {
+    margin: 4px 0 16px;
+    color: #ff7474;
+    font-size: 13px;
+    text-align: center;
+}
+
+.payment-history-submit,
+.payment-history-secondary-button {
+    width: 100%;
+    min-height: 52px;
+    border: 0;
+    border-radius: 4px;
+    background: #1eb5d1;
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.payment-history-submit:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.payment-history-list {
+    padding: 6px 42px 0;
+}
+
+.payment-history-item {
+    padding: 12px 0 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.payment-history-item dl,
+.payment-history-event-info dl {
+    margin: 0;
+}
+
+.payment-history-item dl > div,
+.payment-history-event-info dl > div {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.payment-history-item dt,
+.payment-history-event-info dt {
+    color: #87939d;
+    font-size: 13px;
+}
+
+.payment-history-item dd,
+.payment-history-event-info dd {
+    margin: 0;
+    color: #e8ecee;
+    font-size: 13px;
+}
+
+.payment-history-paid {
+    color: #1ec6df !important;
+    font-weight: 700;
+}
+
+
+.payment-history-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 15px 20px 6px;
+}
+
+.payment-history-pagination[hidden] {
+    display: none;
+}
+
+.payment-history-page-button,
+.payment-history-page-nav {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 4px;
+    border: 0;
+    background: transparent;
+    color: #d8dde0;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 28px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.payment-history-page-button::before {
+    content: "[";
+    margin-right: 2px;
+}
+
+.payment-history-page-button::after {
+    content: "]";
+    margin-left: 2px;
+}
+
+.payment-history-page-button:hover,
+.payment-history-page-button:focus-visible,
+.payment-history-page-nav:hover,
+.payment-history-page-nav:focus-visible {
+    color: #6fe7f6;
+    outline: none;
+}
+
+.payment-history-page-button.is-active {
+    color: #14c2df;
+    font-weight: 800;
+}
+
+.payment-history-page-nav {
+    color: #8b9aa5;
+    font-size: 21px;
+}
+
+.payment-history-event-info {
+    padding: 15px 42px 0;
+}
+
+.payment-history-policy {
+    padding: 22px 42px 12px;
+    color: #cbd1d5;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.payment-history-policy p {
+    margin: 3px 0;
+}
+
+.payment-history-secondary-button {
+    display: block;
+    width: calc(100% - 84px);
+    margin: 8px 42px 38px;
+    background: #33414a;
+}
+
+.payment-history-empty-content {
+    padding: 42px;
+    text-align: center;
+}
+
+.payment-history-empty-content h2 {
+    color: #ff9b00;
+}
+
+.payment-history-empty-content p {
+    margin: 18px 0 28px;
+    color: #d0d6da;
+    font-size: 14px;
+}
+
+@media (max-width: 720px) {
+    .payment-history-modal {
+        padding: 12px;
+    }
+
+    .payment-history-brand {
+        padding: 34px 40px 24px;
+    }
+
+    .payment-history-logo {
+        font-size: clamp(15px, 4.6vw, 21px);
+    }
+
+    .payment-history-form,
+    .payment-history-list,
+    .payment-history-event-info,
+    .payment-history-policy {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
+    .payment-history-field {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .payment-history-secondary-button {
+        width: calc(100% - 40px);
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .payment-history-item dl > div,
+    .payment-history-event-info dl > div {
+        grid-template-columns: 82px 1fr;
+    }
+}
+
+/* =====================================
+   Modal viewport stabilization
+   - html overflow는 건드리지 않음
+   - body만 현재 스크롤 위치에서 고정
+===================================== */
+
+body.modal-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+.ticket-purchase-modal,
+.payment-history-modal,
+.action-modal,
+.speaker-modal {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ticket-purchase-backdrop,
+.payment-history-backdrop,
+.action-modal-backdrop,
+.speaker-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+}
+
+.ticket-purchase-dialog,
+.payment-history-dialog,
+.action-modal-dialog {
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.speaker-modal-dialog {
+    width: min(980px, calc(100vw - 48px));
+    height: min(700px, calc(100dvh - 48px));
+    max-height: calc(100dvh - 24px);
+}
+
+/* 모바일 연사 상세 화살표를 카드가 아닌 화면 양쪽 기준으로 배치 */
+@media (max-width: 767px) {
+    .speaker-modal {
+        padding:
+                max(10px, env(safe-area-inset-top))
+                max(10px, env(safe-area-inset-right))
+                max(10px, env(safe-area-inset-bottom))
+                max(10px, env(safe-area-inset-left));
+    }
+
+    .speaker-modal-dialog {
+        position: relative;
+        width: 100%;
+        height: calc(
+                100dvh -
+                env(safe-area-inset-top) -
+                env(safe-area-inset-bottom) -
+                20px
+        );
+        max-height: none;
+        padding: 0 52px;
+    }
+
+    .speakerDetailSwiper {
+        width: min(320px, 100%);
+        height: min(570px, calc(100dvh - 64px));
+    }
+
+    .speaker-modal-nav {
+        position: absolute;
+        top: 50%;
+        z-index: 20;
+        width: 42px;
+        height: 54px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        font-size: 42px;
+        line-height: 1;
+        transform: translateY(-50%);
+    }
+
+    .speaker-modal-prev {
+        left: 8px;
+    }
+
+    .speaker-modal-next {
+        right: 8px;
+    }
+}
+
+@media (max-width: 390px) {
+    .speaker-modal-dialog {
+        padding-right: 42px;
+        padding-left: 42px;
+    }
+
+    .speaker-modal-prev {
+        left: 2px;
+    }
+
+    .speaker-modal-next {
+        right: 2px;
+    }
+
+    .speaker-modal-nav {
+        width: 36px;
+        font-size: 36px;
     }
 }

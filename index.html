@@ -109,18 +109,18 @@
                   ><img src="./assets/tell.svg"
                 /></a> -->
                 <a
-                    href="https://x.com/bctoday_office"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="X"
+                        href="https://x.com/bctoday_office"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="X"
                 >
                     <img src="./assets/x.svg" alt="X (Twitter) 아이콘"/>
                 </a>
                 <a
-                    href="https://www.youtube.com/@blockchaintoday.official"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="YouTube"
+                        href="https://www.youtube.com/@blockchaintoday.official"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="YouTube"
                 >
                     <img src="./assets/you.svg" alt="YouTube 아이콘"/>
                 </a>
@@ -255,14 +255,20 @@
                     티켓 구매하기
                 </button>
 
-                <a
-                        class="history-link"
-                        href="https://consumer.tosspayments.com/payment-history/card"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                <!--                <a-->
+                <!--                        class="history-link"-->
+                <!--                        href="https://consumer.tosspayments.com/payment-history/card"-->
+                <!--                        target="_blank"-->
+                <!--                        rel="noopener noreferrer"-->
+                <!--                >-->
+                <!--                    구매 내역 확인하기-->
+                <!--                </a>-->
+                <button
+                        type="button"
+                        class="history-link js-open-payment-history-modal"
                 >
                     구매 내역 확인하기
-                </a>
+                </button>
             </div>
         </div>
     </section>
@@ -569,7 +575,186 @@
             </form>
         </div>
     </div>
+    <div
+            class="payment-history-modal"
+            id="payment-history-modal"
+            aria-hidden="true"
+    >
+        <div class="payment-history-backdrop" aria-hidden="true"></div>
 
+        <div
+                class="payment-history-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="payment-history-title"
+        >
+            <button
+                    type="button"
+                    class="payment-history-close"
+                    aria-label="닫기"
+                    data-payment-history-close
+            >
+                ×
+            </button>
+
+            <header class="payment-history-brand">
+            <span class="payment-history-year michroma-regular">
+                2026
+            </span>
+
+                <strong class="payment-history-logo michroma-regular">
+                    DIGITAL ASSET KOREA SUMMIT
+                </strong>
+
+                <small>
+                    온라인에서는 경험할 수 없는 현장만의 특별함을 확보하세요.
+                </small>
+            </header>
+
+            <!-- 조회 입력 화면 -->
+            <section
+                    class="payment-history-view"
+                    id="payment-history-search-view"
+            >
+                <div class="payment-history-intro">
+                    <h2 id="payment-history-title">구매 내역 확인</h2>
+                    <p>
+                        2026 Digital Asset Korea Summit 티켓 구매 내역을
+                        조회합니다.<br>
+                        예매 시 입력하신 정보로 조회해 주세요.
+                    </p>
+                </div>
+
+                <form
+                        class="payment-history-form"
+                        id="payment-history-form"
+                        novalidate
+                >
+                    <label class="payment-history-field">
+                        <span>성명</span>
+                        <input
+                                type="text"
+                                name="name"
+                                placeholder="홍길동"
+                                maxlength="100"
+                                autocomplete="name"
+                                required
+                        >
+                    </label>
+
+                    <label class="payment-history-field">
+                        <span>연락처</span>
+                        <input
+                                type="tel"
+                                name="phone"
+                                placeholder="010-1234-5678"
+                                maxlength="13"
+                                inputmode="numeric"
+                                autocomplete="tel"
+                                required
+                        >
+                    </label>
+
+                    <p
+                            class="payment-history-error"
+                            id="payment-history-error"
+                            hidden
+                    ></p>
+
+                    <button
+                            type="submit"
+                            class="payment-history-submit"
+                            id="payment-history-submit"
+                    >
+                        내역 조회하기
+                    </button>
+                </form>
+            </section>
+
+            <!-- 조회 성공 화면 -->
+            <section
+                    class="payment-history-view payment-history-result"
+                    id="payment-history-result-view"
+                    hidden
+            >
+                <div class="payment-history-result-intro">
+                    <h2>구매 내역 확인</h2>
+                    <p>
+                        <strong id="payment-history-customer-name"></strong>님의
+                        예매 내역입니다.
+                    </p>
+                </div>
+
+                <div
+                        class="payment-history-list"
+                        id="payment-history-list"
+                ></div>
+
+                <div
+                        class="payment-history-pagination"
+                        id="payment-history-pagination"
+                        hidden
+                        aria-label="구매 내역 페이지"
+                ></div>
+
+                <div class="payment-history-event-info">
+                    <dl>
+                        <div>
+                            <dt>행사 장소</dt>
+                            <dd>코엑스 오디토리움</dd>
+                        </div>
+                        <div>
+                            <dt>행사 일시</dt>
+                            <dd>2026. 7. 25. (토)</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="payment-history-policy">
+                    <p>· 행사 7일 전까지: 100% 전액 환불</p>
+                    <p>· 행사 6일 전 이후: 환불 불가</p>
+                    <p>
+                        · 환불 처리는 결제 수단에 따라 영업일 기준
+                        3~7일 소요됩니다.
+                    </p>
+                    <p>
+                        · 환불 문의:
+                        info@digitalassetkoreasummit.com
+                    </p>
+                </div>
+
+                <button
+                        type="button"
+                        class="payment-history-secondary-button"
+                        data-payment-history-retry
+                >
+                    다른 정보로 조회하기
+                </button>
+            </section>
+
+            <!-- 조회 실패 화면 -->
+            <section
+                    class="payment-history-view payment-history-empty"
+                    id="payment-history-empty-view"
+                    hidden
+            >
+                <div class="payment-history-empty-content">
+                    <h2>구매 내역 확인 실패</h2>
+                    <p>
+                        입력하신 정보와 일치하는 구매 내역이 없습니다.
+                    </p>
+
+                    <button
+                            type="button"
+                            class="payment-history-submit"
+                            data-payment-history-retry
+                    >
+                        다시 입력하기
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
     <div class="action-modal" id="action-modal" aria-hidden="true">
         <div class="action-modal-backdrop" aria-hidden="true"></div>
 
@@ -709,18 +894,18 @@
         <div class="social-icons">
             <!-- <a href="#" aria-label="Telegram"><img src="./assets/tell.svg" /></a> -->
             <a
-                href="https://x.com/bctoday_office"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="X"
+                    href="https://x.com/bctoday_office"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="X"
             >
                 <img src="./assets/x.svg" alt="X (Twitter) 아이콘" />
             </a>
             <a
-                href="https://www.youtube.com/@blockchaintoday.official"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
+                    href="https://www.youtube.com/@blockchaintoday.official"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube"
             >
                 <img src="./assets/you.svg" alt="YouTube 아이콘" />
             </a>
@@ -734,12 +919,35 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
-        // const SPEAKER_API_URL =
-        //     location.hostname === "localhost" || location.hostname === "127.0.0.1"
-        //         ? "http://127.0.0.1:8000/api/public/speakers"
-        //         : "https://api.digitalassetkoreasummit.com/api/public/speakers";
+        // 로컬 API 사용
+        const API_BASE =
+            "http://127.0.0.1:8000/api/public";
 
-        const SPEAKER_API_URL = "https://api.digitalassetkoreasummit.com/api/public/speakers";
+        // 실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
+        // const API_BASE =
+        //     "https://api.digitalassetkoreasummit.com/api/public";
+
+        const SPEAKER_API_URL =
+            `${API_BASE}/speakers`;
+
+        const TICKET_PREPARE_API_URL =
+            `${API_BASE}/ticket-payments/prepare`;
+
+        const PAYMENT_HISTORY_API_URL =
+            `${API_BASE}/ticket-payments/history`;
+
+        const APPLICATION_API_BASE =
+            API_BASE;
+
+        let lockedScrollY = 0;
+
+        function lockPageScroll() {
+            document.body.classList.add("modal-open");
+        }
+
+        function unlockPageScroll() {
+            document.body.classList.remove("modal-open");
+        }
 
         const speakerWrapper = document.getElementById("speaker-wrapper");
         const detailWrapper = document.getElementById("speaker-detail-wrapper");
@@ -925,9 +1133,10 @@
 
             lastFocusedElement = triggerElement || document.activeElement;
 
+            lockPageScroll();
+
             modal.classList.add("is-open");
             modal.setAttribute("aria-hidden", "false");
-            document.body.classList.add("speaker-modal-open");
             mainSwiper?.autoplay?.stop();
 
             requestAnimationFrame(() => {
@@ -952,8 +1161,9 @@
 
             modal.classList.remove("is-open");
             modal.setAttribute("aria-hidden", "true");
-            document.body.classList.remove("speaker-modal-open");
             mainSwiper?.autoplay?.start();
+
+            unlockPageScroll();
 
             if (lastFocusedElement instanceof HTMLElement) {
                 lastFocusedElement.focus({ preventScroll: true });
@@ -1084,7 +1294,7 @@
         //         ? "http://127.0.0.1:8000/api/public/ticket-payments/prepare"
         //         : "https://api.digitalassetkoreasummit.com/api/public/ticket-payments/prepare";
 
-        const TICKET_PREPARE_API_URL = "https://api.digitalassetkoreasummit.com/api/public/ticket-payments/prepare";
+        // const TICKET_PREPARE_API_URL = "https://api.digitalassetkoreasummit.com/api/public/ticket-payments/prepare";
 
         const ticketPurchaseModal =
             document.getElementById("ticket-purchase-modal");
@@ -1131,6 +1341,8 @@
             ticketPurchaseSubmit.disabled = false;
             ticketPurchaseSubmit.textContent = "티켓 구매하기";
 
+            lockPageScroll();
+
             ticketPurchaseModal.classList.add("is-open");
             ticketPurchaseModal.setAttribute("aria-hidden", "false");
 
@@ -1140,10 +1352,17 @@
         }
 
         function closeTicketPurchaseModal() {
-            if (!ticketPurchaseModal) return;
+            if (
+                !ticketPurchaseModal ||
+                !ticketPurchaseModal.classList.contains("is-open")
+            ) {
+                return;
+            }
 
             ticketPurchaseModal.classList.remove("is-open");
             ticketPurchaseModal.setAttribute("aria-hidden", "true");
+
+            unlockPageScroll();
         }
 
         document.querySelectorAll(".js-open-ticket-modal").forEach((button) => {
@@ -1235,12 +1454,485 @@
             }
         });
 
+
+        // =====================================
+        // 구매 내역 조회 모달
+        // =====================================
+
+        const paymentHistoryModal =
+            document.getElementById("payment-history-modal");
+        const paymentHistorySearchView =
+            document.getElementById("payment-history-search-view");
+        const paymentHistoryResultView =
+            document.getElementById("payment-history-result-view");
+        const paymentHistoryEmptyView =
+            document.getElementById("payment-history-empty-view");
+        const paymentHistoryForm =
+            document.getElementById("payment-history-form");
+        const paymentHistoryError =
+            document.getElementById("payment-history-error");
+        const paymentHistorySubmit =
+            document.getElementById("payment-history-submit");
+        const paymentHistoryList =
+            document.getElementById("payment-history-list");
+        const paymentHistoryPagination =
+            document.getElementById("payment-history-pagination");
+        const paymentHistoryCustomerName =
+            document.getElementById("payment-history-customer-name");
+        const paymentHistoryPhoneInput =
+            paymentHistoryForm?.querySelector('input[name="phone"]');
+
+        const TICKET_UNIT_PRICE = 19000;
+        const PAYMENT_PAGE_WINDOW_SIZE = 5;
+
+        let paymentHistoryData = null;
+        let paidPaymentHistoryItems = [];
+        let currentPaymentHistoryIndex = 0;
+
+        function showPaymentHistoryView(view) {
+            if (paymentHistorySearchView) {
+                paymentHistorySearchView.hidden = view !== "search";
+            }
+
+            if (paymentHistoryResultView) {
+                paymentHistoryResultView.hidden = view !== "result";
+            }
+
+            if (paymentHistoryEmptyView) {
+                paymentHistoryEmptyView.hidden = view !== "empty";
+            }
+        }
+
+        function resetPaymentHistoryModal() {
+            paymentHistoryForm?.reset();
+
+            paymentHistoryData = null;
+            paidPaymentHistoryItems = [];
+            currentPaymentHistoryIndex = 0;
+
+            if (paymentHistoryError) {
+                paymentHistoryError.hidden = true;
+                paymentHistoryError.textContent = "";
+            }
+
+            if (paymentHistorySubmit) {
+                paymentHistorySubmit.disabled = false;
+                paymentHistorySubmit.textContent = "내역 조회하기";
+            }
+
+            if (paymentHistoryList) {
+                paymentHistoryList.innerHTML = "";
+            }
+
+            if (paymentHistoryPagination) {
+                paymentHistoryPagination.hidden = true;
+                paymentHistoryPagination.innerHTML = "";
+            }
+
+            showPaymentHistoryView("search");
+        }
+
+        function openPaymentHistoryModal() {
+            if (!paymentHistoryModal) return;
+
+            resetPaymentHistoryModal();
+            lockPageScroll();
+
+            paymentHistoryModal.classList.add("is-open");
+            paymentHistoryModal.setAttribute("aria-hidden", "false");
+
+            requestAnimationFrame(() => {
+                paymentHistoryForm
+                    ?.querySelector('input[name="name"]')
+                    ?.focus();
+            });
+        }
+
+        function closePaymentHistoryModal() {
+            if (
+                !paymentHistoryModal ||
+                !paymentHistoryModal.classList.contains("is-open")
+            ) {
+                return;
+            }
+
+            paymentHistoryModal.classList.remove("is-open");
+            paymentHistoryModal.setAttribute("aria-hidden", "true");
+
+            unlockPageScroll();
+        }
+
+        function formatPaymentDate(value) {
+            if (!value) {
+                return "확인 중";
+            }
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return "확인 중";
+            }
+
+            return new Intl.DateTimeFormat("ko-KR", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+            }).format(date);
+        }
+
+        function renderPaymentHistoryPagination() {
+            if (!paymentHistoryPagination) return;
+
+            const totalItems = paidPaymentHistoryItems.length;
+
+            if (totalItems <= 1) {
+                paymentHistoryPagination.hidden = true;
+                paymentHistoryPagination.innerHTML = "";
+                return;
+            }
+
+            const windowStart =
+                Math.floor(
+                    currentPaymentHistoryIndex /
+                    PAYMENT_PAGE_WINDOW_SIZE,
+                ) * PAYMENT_PAGE_WINDOW_SIZE;
+
+            const windowEnd = Math.min(
+                windowStart + PAYMENT_PAGE_WINDOW_SIZE,
+                totalItems,
+            );
+
+            const buttons = [];
+
+            if (windowStart > 0) {
+                buttons.push(`
+                    <button
+                        type="button"
+                        class="payment-history-page-nav"
+                        data-payment-history-page="${windowStart - 1}"
+                        aria-label="이전 구매 내역 페이지 묶음"
+                    >
+                        ‹
+                    </button>
+                `);
+            }
+
+            for (
+                let index = windowStart;
+                index < windowEnd;
+                index += 1
+            ) {
+                const isActive =
+                    index === currentPaymentHistoryIndex;
+
+                buttons.push(`
+                    <button
+                        type="button"
+                        class="payment-history-page-button
+                            ${isActive ? "is-active" : ""}"
+                        data-payment-history-page="${index}"
+                        aria-label="${index + 1}번째 구매 내역"
+                        aria-current="${isActive ? "page" : "false"}"
+                    >
+                        ${index + 1}
+                    </button>
+                `);
+            }
+
+            if (windowEnd < totalItems) {
+                buttons.push(`
+                    <button
+                        type="button"
+                        class="payment-history-page-nav"
+                        data-payment-history-page="${windowEnd}"
+                        aria-label="다음 구매 내역 페이지 묶음"
+                    >
+                        ›
+                    </button>
+                `);
+            }
+
+            paymentHistoryPagination.hidden = false;
+            paymentHistoryPagination.innerHTML =
+                buttons.join("");
+        }
+
+        function renderPaymentHistoryPage(index) {
+            if (
+                !paymentHistoryData ||
+                !paymentHistoryList ||
+                !paymentHistoryCustomerName ||
+                paidPaymentHistoryItems.length === 0 ||
+                index < 0 ||
+                index >= paidPaymentHistoryItems.length
+            ) {
+                return;
+            }
+
+            currentPaymentHistoryIndex = index;
+
+            const payment =
+                paidPaymentHistoryItems[currentPaymentHistoryIndex];
+
+            const amount = Number(payment.amount || 0);
+
+            const quantity =
+                amount > 0
+                    ? Math.max(
+                        1,
+                        Math.round(amount / TICKET_UNIT_PRICE),
+                    )
+                    : 1;
+
+            const orderId =
+                payment.order_id || "주문번호 확인 중";
+
+            paymentHistoryCustomerName.textContent =
+                paymentHistoryData.name || "";
+
+            paymentHistoryList.innerHTML = `
+                <article class="payment-history-item">
+                    <dl>
+                        <div>
+                            <dt>성명</dt>
+                            <dd>
+                                ${escapeHtml(paymentHistoryData.name)}
+                            </dd>
+                        </div>
+
+                        <div>
+                            <dt>주문 번호</dt>
+                            <dd>${escapeHtml(orderId)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>상품명</dt>
+                            <dd>
+                                ${escapeHtml(payment.payment_name)}
+                            </dd>
+                        </div>
+
+                        <div>
+                            <dt>결제 금액</dt>
+                            <dd>
+                                ${amount.toLocaleString("ko-KR")}원
+                            </dd>
+                        </div>
+
+                        <div>
+                            <dt>구매 수량</dt>
+                            <dd>${quantity}장</dd>
+                        </div>
+
+                        <div>
+                            <dt>결제 상태</dt>
+                            <dd class="payment-history-paid">
+                                ${escapeHtml(payment.status_name)}
+                            </dd>
+                        </div>
+
+                        <div>
+                            <dt>결제 일시</dt>
+                            <dd>
+                                ${formatPaymentDate(payment.paid_at)}
+                            </dd>
+                        </div>
+                    </dl>
+                </article>
+            `;
+
+            renderPaymentHistoryPagination();
+            showPaymentHistoryView("result");
+        }
+
+        document
+            .querySelectorAll(".js-open-payment-history-modal")
+            .forEach((button) => {
+                button.addEventListener(
+                    "click",
+                    openPaymentHistoryModal,
+                );
+            });
+
+        paymentHistoryModal?.addEventListener("click", (event) => {
+            const pageButton = event.target.closest(
+                "[data-payment-history-page]",
+            );
+
+            if (pageButton) {
+                const pageIndex = Number(
+                    pageButton.dataset.paymentHistoryPage,
+                );
+
+                if (
+                    Number.isInteger(pageIndex) &&
+                    pageIndex >= 0 &&
+                    pageIndex < paidPaymentHistoryItems.length
+                ) {
+                    renderPaymentHistoryPage(pageIndex);
+                }
+
+                return;
+            }
+
+            if (
+                event.target.closest(
+                    "[data-payment-history-close]",
+                )
+            ) {
+                closePaymentHistoryModal();
+                return;
+            }
+
+            if (
+                event.target.closest(
+                    "[data-payment-history-retry]",
+                )
+            ) {
+                resetPaymentHistoryModal();
+
+                requestAnimationFrame(() => {
+                    paymentHistoryForm
+                        ?.querySelector('input[name="name"]')
+                        ?.focus();
+                });
+            }
+        });
+
+        paymentHistoryPhoneInput?.addEventListener(
+            "input",
+            (event) => {
+                const input = event.currentTarget;
+
+                const numbers = input.value
+                    .replace(/\D/g, "")
+                    .slice(0, 11);
+
+                if (numbers.length <= 3) {
+                    input.value = numbers;
+                    return;
+                }
+
+                if (numbers.length <= 7) {
+                    input.value =
+                        `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+                    return;
+                }
+
+                input.value =
+                    `${numbers.slice(0, 3)}-` +
+                    `${numbers.slice(3, 7)}-` +
+                    `${numbers.slice(7)}`;
+            },
+        );
+
+        paymentHistoryForm?.addEventListener(
+            "submit",
+            async (event) => {
+                event.preventDefault();
+
+                if (!paymentHistoryForm.reportValidity()) {
+                    return;
+                }
+
+                const formData =
+                    new FormData(paymentHistoryForm);
+
+                const payload = {
+                    name: String(
+                        formData.get("name") || "",
+                    ).trim(),
+                    phone: String(
+                        formData.get("phone") || "",
+                    ),
+                };
+
+                if (paymentHistoryError) {
+                    paymentHistoryError.hidden = true;
+                    paymentHistoryError.textContent = "";
+                }
+
+                if (paymentHistorySubmit) {
+                    paymentHistorySubmit.disabled = true;
+                    paymentHistorySubmit.textContent = "조회 중...";
+                }
+
+                try {
+                    const response = await fetch(
+                        PAYMENT_HISTORY_API_URL,
+                        {
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(payload),
+                        },
+                    );
+
+                    const result = await response
+                        .json()
+                        .catch(() => null);
+
+                    if (!response.ok) {
+                        showPaymentHistoryView("empty");
+                        return;
+                    }
+
+                    const paidPayments =
+                        Array.isArray(result?.payments)
+                            ? result.payments.filter(
+                                (payment) =>
+                                    Number(payment.status) === 2,
+                            )
+                            : [];
+
+                    if (paidPayments.length === 0) {
+                        showPaymentHistoryView("empty");
+                        return;
+                    }
+
+                    paymentHistoryData = result;
+                    paidPaymentHistoryItems = paidPayments;
+                    currentPaymentHistoryIndex = 0;
+
+                    renderPaymentHistoryPage(0);
+                } catch (error) {
+                    if (paymentHistoryError) {
+                        paymentHistoryError.textContent =
+                            "구매 내역 조회 중 오류가 발생했습니다.";
+                        paymentHistoryError.hidden = false;
+                    }
+
+                    showPaymentHistoryView("search");
+                } finally {
+                    if (paymentHistorySubmit) {
+                        paymentHistorySubmit.disabled = false;
+                        paymentHistorySubmit.textContent =
+                            "내역 조회하기";
+                    }
+                }
+            },
+        );
+
+        document.addEventListener("keydown", (event) => {
+            if (
+                event.key === "Escape" &&
+                paymentHistoryModal?.classList.contains("is-open")
+            ) {
+                closePaymentHistoryModal();
+            }
+        });
+
         // const APPLICATION_API_BASE =
         //     location.hostname === "localhost" || location.hostname === "127.0.0.1"
         //         ? "http://127.0.0.1:8000/api/public"
         //         : "https://api.digitalassetkoreasummit.com/api/public";
 
-        const APPLICATION_API_BASE = "https://api.digitalassetkoreasummit.com/api/public";
+        // const APPLICATION_API_BASE = "https://api.digitalassetkoreasummit.com/api/public";
 
         const actionModal = document.getElementById("action-modal");
         const actionModalTitle = document.getElementById("action-modal-title");
@@ -1410,6 +2102,8 @@
             applicationFormFields.innerHTML =
                 config.fields.map(createApplicationField).join("");
 
+            lockPageScroll();
+
             actionModal.classList.add("is-open");
             actionModal.setAttribute("aria-hidden", "false");
 
@@ -1426,14 +2120,22 @@
             actionModalDescription.textContent = "해당 기능은 준비 중입니다.";
             applicationForm.hidden = true;
 
+            lockPageScroll();
+
             actionModal.classList.add("is-open");
             actionModal.setAttribute("aria-hidden", "false");
         }
 
         function closeActionModal() {
+            if (!actionModal.classList.contains("is-open")) {
+                return;
+            }
+
             actionModal.classList.remove("is-open");
             actionModal.setAttribute("aria-hidden", "true");
             currentApplicationType = null;
+
+            unlockPageScroll();
         }
 
         document.querySelectorAll(".js-open-action-modal").forEach((button) => {
