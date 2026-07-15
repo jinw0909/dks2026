@@ -3537,7 +3537,7 @@ body.modal-open {
 }
 
 .payment-result-details {
-    padding: 20px 42px 16px;
+    padding: 20px 42px 0;
 }
 
 .payment-result-details dl,
@@ -3570,7 +3570,7 @@ body.modal-open {
 }
 
 .payment-result-event-info {
-    padding: 8px 42px 0;
+    padding: 0 42px 0;
 }
 
 .payment-result-help {
@@ -4127,7 +4127,7 @@ body.modal-open {
 }
 
 .payment-history-item {
-    padding: 0 0 18px;
+    padding: 0;
     border-bottom: 1px solid rgba(255,255,255,.24);
 }
 
@@ -4257,5 +4257,304 @@ body.modal-open {
     .payment-history-pagination {
         gap: 14px;
         padding-bottom: 22px;
+    }
+}
+
+/* =========================================================
+   Header action buttons / Hero countdown ticket CTA
+   ========================================================= */
+.header-actions {
+    position: absolute;
+    right: 100px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-history-btn,
+.header-ticket-btn,
+.countdown-purchase {
+    appearance: none;
+    border: 0;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.header-history-btn,
+.header-ticket-btn {
+    min-height: 42px;
+    padding: 0 17px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 750;
+    white-space: nowrap;
+    transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease;
+}
+
+.header-history-btn {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /*background: rgba(17, 28, 35, 0.78);*/
+    background: var(--orange);
+    backdrop-filter: blur(10px);
+    opacity: 0.8;
+}
+
+.header-ticket-btn {
+    background: var(--orange);
+}
+
+.header-history-btn:hover,
+.header-ticket-btn:hover,
+.countdown-purchase:hover {
+    filter: brightness(1.08);
+}
+
+.header-history-btn:active,
+.header-ticket-btn:active,
+.countdown-purchase:active {
+    transform: translateY(1px);
+}
+
+.countdown {
+    width: min(1040px, 100%);
+    padding: 0 0 0 42px;
+    justify-content: flex-start;
+    gap: 24px;
+    background: rgba(36, 40, 44, 0.92);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.24);
+}
+
+.countdown > span:first-child {
+    flex: 0 0 auto;
+    margin-right: 10px;
+}
+
+.countdown .time-block {
+    flex: 0 0 62px;
+}
+
+.countdown .separator {
+    flex: 0 0 auto;
+}
+
+.countdown-purchase {
+    align-self: stretch;
+    min-width: 188px;
+    margin-left: auto;
+    padding: 12px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(135deg, #16bad7, #0798bd);
+    box-shadow: inset 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.countdown-purchase span {
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.countdown-purchase strong {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.2;
+}
+
+@media (max-width: 1180px) {
+    .header-inner .brand {
+        margin-left: 32px;
+    }
+
+    .header-actions {
+        right: 32px;
+    }
+
+    .nav {
+        gap: 30px;
+    }
+
+    .countdown {
+        width: min(960px, 100%);
+        padding-left: 30px;
+        gap: 16px;
+    }
+
+    .countdown-purchase {
+        min-width: 170px;
+    }
+}
+
+@media (max-width: 900px) {
+    .header-ticket-btn {
+        display: none;
+    }
+
+    .header-history-btn {
+        padding-inline: 14px;
+    }
+
+    .countdown {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 24px 24px 0;
+        gap: 16px;
+    }
+
+    .countdown > span:first-child {
+        flex: 0 0 100%;
+        justify-content: center;
+        margin: 0 0 2px;
+    }
+
+    .countdown-purchase {
+        flex: 0 0 calc(100% + 48px);
+        min-height: 64px;
+        margin: 8px -24px 0;
+        border-radius: 0 0 12px 12px;
+    }
+}
+
+@media (max-width: 720px) {
+    .header-inner {
+        width: 100% !important;
+        min-height: 64px;
+        padding: 12px 16px 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 10px 12px;
+    }
+
+    .header-inner .brand {
+        margin: 0;
+        min-width: 0;
+    }
+
+    .header-inner .brand img {
+        display: block;
+        width: min(158px, 44vw);
+        max-width: 100%;
+    }
+
+    .header-actions {
+        position: static;
+        transform: none;
+        justify-self: end;
+    }
+
+    .header-history-btn {
+        min-height: 38px;
+        padding: 0 12px;
+        font-size: 12px;
+    }
+
+    .nav {
+        position: static;
+        left: auto;
+        transform: none;
+        order: initial;
+        grid-column: 1 / -1;
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        padding: 11px 12px 12px;
+        justify-content: center;
+        gap: clamp(18px, 7vw, 34px);
+        overflow-x: auto;
+        background: rgba(3, 5, 6, 0.94);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav a {
+        flex: 0 0 auto;
+        font-size: 12px;
+    }
+
+    .hero-inner {
+        padding-top: 32px;
+    }
+
+    .countdown {
+        width: 100%;
+        margin: 92px auto 32px;
+        padding: 24px 12px 0;
+        display: flex;
+        flex-flow: row wrap;
+        gap: 14px 8px;
+        border-radius: 14px;
+    }
+
+    .countdown > span:first-child {
+        flex-basis: 100%;
+        min-height: auto;
+        margin: 0 0 4px;
+        font-size: 15px;
+    }
+
+    .countdown .time-block {
+        flex: 1 1 50px;
+        min-width: 48px;
+        gap: 6px;
+    }
+
+    .countdown .time-block strong {
+        font-size: clamp(25px, 8vw, 34px);
+    }
+
+    .countdown .time-block small {
+        font-size: 11px;
+    }
+
+    .countdown .separator {
+        align-self: flex-start;
+        margin-top: 6px;
+        font-size: 19px;
+    }
+
+    .countdown-purchase {
+        flex-basis: calc(100% + 24px);
+        width: calc(100% + 24px);
+        min-width: 0;
+        min-height: 62px;
+        margin: 10px -12px 0;
+        border-radius: 0 0 14px 14px;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .countdown-purchase span {
+        font-size: 16px;
+    }
+
+    .countdown-purchase strong {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 390px) {
+    .header-history-btn {
+        padding-inline: 10px;
+        font-size: 11px;
+    }
+
+    .nav {
+        gap: 18px;
+    }
+
+    .countdown {
+        gap-inline: 5px;
+    }
+
+    .countdown .separator {
+        font-size: 16px;
     }
 }
