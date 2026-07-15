@@ -122,6 +122,7 @@ a {
     position: absolute; /* 추가 */
     left: 50%; /* 추가 */
     transform: translateX(-50%);
+    align-items: center;
 }
 
 .nav a {
@@ -130,6 +131,25 @@ a {
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 721px) {
+    .nav a {
+        position: relative;
+        transition:
+                color 180ms ease,
+                transform 180ms ease;
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible {
+        color: #dceaf6;
+        transform: translateY(-2px);
+    }
+}
+
+.navigation-bar {
+    display: none;
+    color: #a1b4c9;
 }
 
 .header-btn,
@@ -287,13 +307,22 @@ h2 {
     min-height: 88px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     gap: 30px;
     margin: 194px auto 72px;
     overflow: hidden;
     border-radius: 12px;
     background: rgba(71, 76, 80, 0.86);
     padding: 16px 48px;
+}
+.countdown-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 8px;
 }
 .countdown > span {
     color: #f4f4f4;
@@ -1030,6 +1059,10 @@ h2 {
         font-size: 12px;
     }
 
+    .navigation-bar {
+        display: block;
+    }
+
     .header-btn {
         min-width: 112px;
         min-height: 42px;
@@ -1360,6 +1393,19 @@ html {
     transition:
             opacity 220ms ease,
             filter 220ms ease;
+}
+
+.speakerSwiper,
+.speakerSwiper.swiper-grab-cursor,
+.speakerSwiper .speaker-slide,
+.speakerSwiper .speaker-card {
+    cursor: default !important;
+}
+
+.speakerSwiper:active,
+.speakerSwiper .speaker-slide:active,
+.speakerSwiper .speaker-card:active {
+    cursor: default !important;
 }
 
 .speakerSwiper .swiper-slide.speaker-slide.swiper-slide-visible {
@@ -1831,7 +1877,7 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 18px;
     margin-top: 18px;
     /*display: none;*/
 }
@@ -2588,6 +2634,7 @@ body {
     color: #fff;
     font-size: 14px;
     font-weight: 700;
+    align-self: center;
 }
 
 .ticket-price-box strong {
@@ -3956,7 +4003,7 @@ body.modal-open {
     letter-spacing: -0.01em;
     white-space: pre-line;
     text-align: left;
-    word-break: normal;
+    word-break: keep-all;
     overflow-wrap: anywhere;
 }
 
@@ -4018,7 +4065,7 @@ body.modal-open {
         line-height: 1.72;
         text-align: left;
         white-space: pre-line;
-        word-break: break-all;
+        word-break: keep-all;
         overflow-wrap: anywhere;
     }
 
@@ -4205,7 +4252,7 @@ body.modal-open {
 
 @media (max-width: 720px) {
     .faq {
-        padding-top: 68px;
+        padding-top: 98px;
         padding-bottom: 28px;
     }
 
@@ -4447,13 +4494,17 @@ body.modal-open {
     }
 
     .header-actions {
-        position: static;
+        /*position: static;*/
         transform: none;
         justify-self: end;
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: .5rem;
     }
 
     .header-history-btn {
-        min-height: 38px;
+        min-height: 32px;
         padding: 0 12px;
         font-size: 12px;
     }
@@ -4472,6 +4523,9 @@ body.modal-open {
         overflow-x: auto;
         background: rgba(3, 5, 6, 0.94);
         border-top: 1px solid rgba(255, 255, 255, 0.06);
+        justify-content: flex-start;
+        padding: 12px 16px;
+        padding-top: 4px;
     }
 
     .nav a {
@@ -4491,6 +4545,10 @@ body.modal-open {
         flex-flow: row wrap;
         gap: 14px 8px;
         border-radius: 14px;
+    }
+
+    .countdown-time {
+        gap: 12px;
     }
 
     .countdown > span:first-child {
@@ -4547,7 +4605,7 @@ body.modal-open {
     }
 
     .nav {
-        gap: 18px;
+        gap: 12px;
     }
 
     .countdown {
