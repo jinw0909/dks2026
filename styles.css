@@ -2558,7 +2558,13 @@ body {
 }
 
 .ticket-purchase-field select {
-    appearance: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 44px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8' fill='none'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%2398A7B5' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 14px 8px;
 }
 
 .ticket-purchase-field input:focus,
@@ -3656,5 +3662,600 @@ body.modal-open {
     .payment-result-event-info dl > div {
         grid-template-columns: 82px minmax(0, 1fr);
         gap: 12px;
+    }
+}
+
+/* =========================================================
+   FAQ 정책 링크 / 약관·정책 모달
+   ========================================================= */
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.faq-policy-link,
+.faq-legal-links button,
+.footer-policy-links button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
+.faq-policy-link {
+    display: inline-flex;
+    margin-top: 12px;
+    color: var(--cyan);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.faq-legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.faq-legal-links button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid rgba(18, 184, 213, 0.55);
+    border-radius: 7px;
+    color: #dce7ee;
+    font-size: 15px;
+    font-weight: 700;
+    transition:
+            border-color 0.2s ease,
+            background-color 0.2s ease,
+            color 0.2s ease;
+}
+
+.faq-legal-links button:hover,
+.faq-legal-links button:focus-visible {
+    border-color: var(--cyan);
+    color: #fff;
+    background: rgba(18, 184, 213, 0.12);
+    outline: none;
+}
+
+.faq-contact-link,
+.faq-payment-history-link {
+    color: #d8e0e3;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.faq-payment-history-link {
+    display: inline-flex;
+    margin-top: 10px;
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+.copyright {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.footer-policy-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px 18px;
+}
+
+.footer-policy-links button {
+    color: #adb6bd;
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.footer-policy-links button:hover,
+.footer-policy-links button:focus-visible {
+    color: #fff;
+    outline: none;
+}
+
+.legal-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10050;
+    display: grid;
+    place-items: center;
+    padding: clamp(16px, 3vw, 42px);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+            opacity 0.2s ease,
+            visibility 0.2s ease;
+}
+
+.legal-modal.is-open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.legal-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.legal-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(980px, 100%);
+    height: min(820px, calc(100dvh - 64px));
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(120, 214, 235, 0.32);
+    border-radius: 18px;
+    background: #020303;
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
+    transform: translateY(14px) scale(0.985);
+    transition: transform 0.2s ease;
+}
+
+.legal-modal.is-open .legal-modal-dialog {
+    transform: translateY(0) scale(1);
+}
+
+.legal-modal-close {
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    z-index: 5;
+    width: 42px;
+    height: 42px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.legal-modal-close::before,
+.legal-modal-close::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 8px;
+    width: 27px;
+    height: 2px;
+    border-radius: 999px;
+    background: #7e91a5;
+    transition: background-color 0.2s ease;
+}
+
+.legal-modal-close::before {
+    transform: rotate(45deg);
+}
+
+.legal-modal-close::after {
+    transform: rotate(-45deg);
+}
+
+.legal-modal-close:hover::before,
+.legal-modal-close:hover::after,
+.legal-modal-close:focus-visible::before,
+.legal-modal-close:focus-visible::after {
+    background: #fff;
+}
+
+.legal-modal-close:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+}
+
+.legal-modal-tabs {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 2.8vw, 34px);
+    padding: 74px 74px 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legal-modal-tab {
+    min-height: 52px;
+    margin: 0;
+    padding: 11px 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: #9baabd;
+    background: transparent;
+    font-family: inherit;
+    font-size: clamp(16px, 2vw, 22px);
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+            color 0.2s ease,
+            border-color 0.2s ease,
+            background-color 0.2s ease;
+}
+
+.legal-modal-tab:hover {
+    color: #dfe9f3;
+}
+
+.legal-modal-tab.is-active {
+    border-color: #04b8d8;
+    color: #08c4e6;
+    background: rgba(18, 184, 213, 0.08);
+}
+
+.legal-modal-tab:focus-visible {
+    outline: 2px solid rgba(18, 184, 213, 0.9);
+    outline-offset: 3px;
+}
+
+.legal-modal-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 24px 74px 58px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--modal-scrollbar-thumb, rgba(120, 214, 235, 0.35)) transparent;
+}
+
+.legal-modal-content::-webkit-scrollbar {
+    width: 9px;
+}
+
+.legal-modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.legal-modal-content::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: var(--modal-scrollbar-thumb, rgba(120, 214, 235, 0.35));
+    background-clip: padding-box;
+}
+
+.legal-modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--modal-scrollbar-thumb-hover, rgba(120, 214, 235, 0.7));
+    background-clip: padding-box;
+}
+
+.legal-modal-panel[hidden] {
+    display: none;
+}
+
+.legal-policy-text {
+    color: #e8edf2;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.78;
+    letter-spacing: -0.01em;
+    white-space: pre-line;
+    text-align: left;
+    word-break: normal;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+    .copyright {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .footer-policy-links {
+        justify-content: flex-start;
+    }
+
+    .legal-modal {
+        place-items: center;
+        padding: 8px;
+    }
+
+    .legal-modal-dialog {
+        width: 100%;
+        height: calc(100dvh - 16px);
+        max-height: none;
+        min-height: 0;
+        border: 1px solid rgba(120, 214, 235, 0.32);
+        border-radius: 16px;
+    }
+
+    .legal-modal-close {
+        top: 12px;
+        right: 12px;
+    }
+
+    .legal-modal-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        padding: 62px 12px 12px;
+        overflow: visible;
+    }
+
+    .legal-modal-tab {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        padding: 8px 5px;
+        font-size: 13px;
+        line-height: 1.25;
+        white-space: normal;
+        word-break: keep-all;
+        text-align: center;
+    }
+
+    .legal-modal-content {
+        padding: 22px 18px 40px;
+    }
+
+    .legal-policy-text {
+        font-size: 14px;
+        line-height: 1.72;
+        text-align: left;
+        white-space: pre-line;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+    }
+
+    .faq-legal-links {
+        flex-direction: column;
+    }
+
+    .faq-legal-links button {
+        width: 100%;
+        justify-content: flex-start;
+        text-align: left;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .legal-modal,
+    .legal-modal-dialog {
+        transition: none;
+    }
+}
+
+
+
+/* =========================================================
+   FAQ / 구매 내역 결과 최종 시안 보정
+   ========================================================= */
+.faq {
+    padding-top: 88px;
+    padding-bottom: 36px;
+}
+
+.faq-layout {
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 96px;
+    align-items: start;
+}
+
+.faq-list {
+    gap: 34px;
+}
+
+.faq-list article {
+    padding-bottom: 0;
+}
+
+.faq-list article h3 {
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,.14);
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.faq-answer {
+    color: #f2f3f4;
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+.faq-answer p {
+    margin: 0;
+    color: inherit;
+}
+
+.faq-answer ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.faq-answer li {
+    padding-left: 1px;
+}
+
+.faq-answer a,
+.faq-payment-history-link {
+    color: #00c1df;
+}
+
+.faq-payment-history-link {
+    display: inline;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    line-height: inherit;
+    cursor: pointer;
+}
+
+.payment-history-result-intro {
+    padding: 18px 36px 20px;
+}
+
+.payment-history-result-intro h2 {
+    font-size: 24px;
+}
+
+.payment-history-result-intro p {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.payment-history-list {
+    padding: 12px 42px 0;
+}
+
+.payment-history-item {
+    padding: 0 0 18px;
+    border-bottom: 1px solid rgba(255,255,255,.24);
+}
+
+.payment-history-item dl > div,
+.payment-history-event-info dl > div {
+    grid-template-columns: 84px minmax(0, 1fr);
+    gap: 16px;
+    padding: 11px 0;
+}
+
+.payment-history-item dt,
+.payment-history-event-info dt {
+    color: #87939d;
+    font-size: 13px;
+}
+
+.payment-history-item dd,
+.payment-history-event-info dd {
+    color: #f4f5f6;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.payment-history-event-info {
+    margin: 0 42px;
+    padding: 18px 0 0;
+    border-bottom: 1px solid rgba(255,255,255,.24);
+}
+
+.payment-history-policy {
+    padding: 18px 42px 4px;
+    color: #f0f2f3;
+    font-size: 12px;
+    line-height: 1.75;
+}
+
+.payment-history-policy p {
+    margin: 1px 0;
+}
+
+.payment-history-policy a {
+    color: #00c1df;
+}
+
+.payment-history-pagination {
+    min-height: 46px;
+    gap: 16px;
+    padding: 8px 20px 24px;
+}
+
+.payment-history-page-button,
+.payment-history-page-nav {
+    min-width: auto;
+    width: auto;
+    height: 28px;
+    padding: 0;
+    color: #d6d9dc;
+    font-size: 13px;
+    line-height: 28px;
+}
+
+.payment-history-page-button::before,
+.payment-history-page-button::after {
+    content: none;
+}
+
+.payment-history-page-button.is-active {
+    color: #00c1df;
+    font-weight: 700;
+}
+
+.payment-history-page-nav {
+    font-size: 18px;
+}
+
+@media (max-width: 720px) {
+    .faq {
+        padding-top: 68px;
+        padding-bottom: 28px;
+    }
+
+    .faq-layout {
+        display: block;
+    }
+
+    .faq-layout > h2 {
+        margin-bottom: 52px;
+    }
+
+    .faq-list {
+        gap: 32px;
+    }
+
+    .faq-list article h3 {
+        font-size: 17px;
+    }
+
+    .faq-answer {
+        font-size: 13px;
+        line-height: 1.72;
+    }
+
+    .payment-history-result-intro {
+        padding: 18px 20px;
+    }
+
+    .payment-history-list {
+        padding: 10px 24px 0;
+    }
+
+    .payment-history-item dl > div,
+    .payment-history-event-info dl > div {
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    .payment-history-event-info {
+        margin: 0 24px;
+        padding-top: 14px;
+    }
+
+    .payment-history-policy {
+        padding: 16px 24px 2px;
+    }
+
+    .payment-history-pagination {
+        gap: 14px;
+        padding-bottom: 22px;
     }
 }
