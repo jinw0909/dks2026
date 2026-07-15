@@ -575,6 +575,133 @@
             </form>
         </div>
     </div>
+
+    <!-- 결제 상태 확인 결과 모달 -->
+    <div
+            class="payment-result-modal"
+            id="payment-result-modal"
+            aria-hidden="true"
+    >
+        <div class="payment-result-backdrop" aria-hidden="true"></div>
+
+        <div
+                class="payment-result-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="payment-result-success-title"
+        >
+            <button
+                    type="button"
+                    class="payment-result-close"
+                    aria-label="닫기"
+                    data-payment-result-close
+            >
+                ×
+            </button>
+
+            <header class="payment-result-brand">
+                <span class="payment-result-year michroma-regular">2026</span>
+                <strong class="payment-result-logo michroma-regular">
+                    DIGITAL ASSET KOREA SUMMIT
+                </strong>
+                <small>온라인에서는 경험할 수 없는 현장만의 특별함을 확보하세요.</small>
+            </header>
+
+            <!-- 결제 완료 화면 -->
+            <section
+                    class="payment-result-view"
+                    id="payment-result-success-view"
+                    hidden
+            >
+                <div class="payment-result-intro payment-result-intro-success">
+                    <h2 id="payment-result-success-title">결제가 완료되었습니다</h2>
+                    <p>디지털 자산 코리아 서밋에 참가해 주셔서 감사합니다.</p>
+                </div>
+
+                <div class="payment-result-details">
+                    <dl>
+                        <div>
+                            <dt>성명</dt>
+                            <dd id="payment-result-name">-</dd>
+                        </div>
+                        <div>
+                            <dt>주문 번호</dt>
+                            <dd id="payment-result-order-id">-</dd>
+                        </div>
+                        <div>
+                            <dt>결제 상품</dt>
+                            <dd id="payment-result-payment-name">-</dd>
+                        </div>
+                        <div>
+                            <dt>결제 금액</dt>
+                            <dd id="payment-result-amount">-</dd>
+                        </div>
+                        <div>
+                            <dt>구매 수량</dt>
+                            <dd id="payment-result-quantity">1장</dd>
+                        </div>
+                        <div>
+                            <dt>결제 일시</dt>
+                            <dd id="payment-result-paid-at">-</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="payment-result-event-info">
+                    <dl>
+                        <div>
+                            <dt>행사 장소</dt>
+                            <dd>코엑스 오디토리움</dd>
+                        </div>
+                        <div>
+                            <dt>행사 일시</dt>
+                            <dd>2026. 7. 25. (토)</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <button
+                        type="button"
+                        class="payment-result-confirm"
+                        data-payment-result-close
+                >
+                    확인
+                </button>
+            </section>
+
+            <!-- 장시간 READY 또는 네트워크 오류 화면 -->
+            <section
+                    class="payment-result-view"
+                    id="payment-result-pending-view"
+                    hidden
+            >
+                <div class="payment-result-intro payment-result-intro-pending">
+                    <h2>결제 결과를 아직 확인하지 못했습니다</h2>
+                    <p>
+                        결제 정보가 아직 확인되지 않았습니다.<br>
+                        결제창에서 결제를 완료하셨다면 새로 결제하지 말고<br>
+                        잠시 후 구매 내역 확인하기를 이용해 주세요.
+                    </p>
+                </div>
+
+                <div class="payment-result-help">
+                    <strong>안내</strong>
+                    <p>· 결제를 완료했다면 잠시 후 구매 내역을 다시 확인해 주세요.</p>
+                    <p>· 결제를 완료하지 않았거나 결제창을 닫았다면 다시 결제할 수 있습니다.</p>
+                    <p>· 결제 영수증이 발급되었다면 결제가 정상적으로 접수된 것이므로 잠시 후 다시 확인해 주세요.</p>
+                </div>
+
+                <button
+                        type="button"
+                        class="payment-result-confirm"
+                        data-payment-result-close
+                >
+                    확인
+                </button>
+            </section>
+        </div>
+    </div>
+
     <div
             class="payment-history-modal"
             id="payment-history-modal"
@@ -935,6 +1062,12 @@
 
         const PAYMENT_HISTORY_API_URL =
             `${API_BASE}/ticket-payments/history`;
+
+        const PAYMENT_STATUS_STORAGE_KEY =
+            "daks_pending_payment";
+
+        const PAYMENT_POLL_INTERVAL_MS = 2000;
+        const PAYMENT_POLL_MAX_ATTEMPTS = 60;
 
         const APPLICATION_API_BASE =
             API_BASE;
@@ -1378,63 +1511,199 @@
         ticketPurchaseForm?.addEventListener("submit", async (event) => {
             event.preventDefault();
 
-            if (!ticketPurchaseForm.reportValidity()) return;
+            if (ticketPurchaseSubmit?.disabled) {
+                return;
+            }
 
             const formData = new FormData(ticketPurchaseForm);
-            const payload = Object.fromEntries(formData.entries());
 
-            payload.privacy_agreed =
+            const name = String(formData.get("name") || "").trim();
+            const phone = String(formData.get("phone") || "").trim();
+            const country = String(formData.get("country") || "").trim();
+            const activityType = String(
+                formData.get("activity_type") || "",
+            ).trim();
+            const registrationPath = String(
+                formData.get("registration_path") || "",
+            ).trim();
+            const privacyAgreed =
                 formData.get("privacy_agreed") === "on";
 
-            if (!payload.activity_type) {
-                payload.activity_type = null;
+            if (!name) {
+                showTicketPurchaseError("성명을 입력해 주세요.");
+                return;
             }
 
-            if (!payload.registration_path) {
-                payload.registration_path = null;
+            if (!phone) {
+                showTicketPurchaseError("연락처를 입력해 주세요.");
+                return;
             }
 
-            ticketPurchaseError.hidden = true;
-            ticketPurchaseSubmit.disabled = true;
-            ticketPurchaseSubmit.textContent = "결제 준비 중...";
+            if (!privacyAgreed) {
+                showTicketPurchaseError(
+                    "개인정보 수집 및 이용 정책에 동의해 주세요.",
+                );
+                return;
+            }
+
+            /*
+             * 사용자 클릭 이벤트 안에서 먼저 빈 창을 연다.
+             * fetch 완료 후 window.open()을 호출하면 브라우저가
+             * 팝업으로 판단해 차단할 수 있다.
+             */
+            const paymentWindow = window.open(
+                "",
+                "_blank",
+            );
+
+            if (!paymentWindow) {
+                showTicketPurchaseError(
+                    "결제창이 차단되었습니다. 브라우저의 팝업 차단을 해제해 주세요.",
+                );
+                return;
+            }
+
+            /*
+             * 새 창에서 원래 페이지를 조작하지 못하게 차단
+             */
+            paymentWindow.opener = null;
+
+            paymentWindow.document.documentElement.innerHTML = `
+                <head>
+                    <meta charset="utf-8">
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1"
+                    >
+                    <title>결제 페이지 연결 중</title>
+
+                    <style>
+                        * {
+                            box-sizing: border-box;
+                        }
+
+                        body {
+                            min-height: 100vh;
+                            margin: 0;
+                            display: grid;
+                            place-items: center;
+                            background: #030506;
+                            color: #f7f7f7;
+                            font-family:
+                                Pretendard,
+                                "Apple SD Gothic Neo",
+                                sans-serif;
+                        }
+
+                        .payment-loading {
+                            text-align: center;
+                        }
+
+                        .payment-loading strong {
+                            display: block;
+                            margin-bottom: 10px;
+                            font-size: 18px;
+                        }
+
+                        .payment-loading p {
+                            margin: 0;
+                            color: #98a7b2;
+                            font-size: 14px;
+                        }
+                    </style>
+                </head>
+
+                <body>
+                    <div class="payment-loading">
+                        <strong>결제 페이지를 준비하고 있습니다.</strong>
+                        <p>잠시만 기다려 주세요.</p>
+                    </div>
+                </body>
+            `;
+
+            if (ticketPurchaseError) {
+                ticketPurchaseError.hidden = true;
+                ticketPurchaseError.textContent = "";
+            }
+
+            if (ticketPurchaseSubmit) {
+                ticketPurchaseSubmit.disabled = true;
+                ticketPurchaseSubmit.textContent = "결제 준비 중...";
+            }
 
             try {
-                const response = await fetch(TICKET_PREPARE_API_URL, {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
+                const response = await fetch(
+                    TICKET_PREPARE_API_URL,
+                    {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            name,
+                            phone,
+                            country: country || null,
+                            activity_type: activityType || null,
+                            registration_path: registrationPath || null,
+                            privacy_agreed: privacyAgreed,
+                        }),
                     },
-                    body: JSON.stringify(payload),
-                });
+                );
 
-                const result = await response.json().catch(() => null);
+                const result = await response.json();
 
                 if (!response.ok) {
-                    const message = Array.isArray(result?.detail)
-                        ? result.detail
-                            .map((item) => item.msg)
-                            .filter(Boolean)
-                            .join("\n")
-                        : result?.detail || "결제 준비 중 오류가 발생했습니다.";
-
-                    throw new Error(message);
+                    throw new Error(
+                        result?.detail ||
+                        "결제 정보를 준비하지 못했습니다.",
+                    );
                 }
 
-                if (!result?.redirect_url) {
-                    throw new Error("결제 페이지 주소를 받지 못했습니다.");
+                if (
+                    !result?.redirect_url ||
+                    !result?.payment_id ||
+                    !result?.ticket_user_id
+                ) {
+                    throw new Error(
+                        "결제 준비 정보를 받지 못했습니다.",
+                    );
                 }
+
+                localStorage.setItem(
+                    PAYMENT_STATUS_STORAGE_KEY,
+                    JSON.stringify({
+                        paymentId: result.payment_id,
+                        ticketUserId: result.ticket_user_id,
+                        createdAt: Date.now(),
+                    }),
+                );
 
                 closeTicketPurchaseModal();
                 ticketPurchaseForm.reset();
 
-                window.location.assign(result.redirect_url);
+                /*
+                 * 원래 DAKS 페이지에서 상태 폴링을 시작하고,
+                 * 새 창만 토스 링크페이 주소로 이동시킨다.
+                 */
+                startStoredPaymentPolling();
+
+                paymentWindow.location.replace(
+                    result.redirect_url,
+                );
             } catch (error) {
-                ticketPurchaseError.textContent =
-                    error.message || "결제 준비 중 오류가 발생했습니다.";
-                ticketPurchaseError.hidden = false;
-                ticketPurchaseSubmit.disabled = false;
-                ticketPurchaseSubmit.textContent = "티켓 구매하기";
+                paymentWindow.close();
+
+                showTicketPurchaseError(
+                    error instanceof Error
+                        ? error.message
+                        : "결제 준비 중 오류가 발생했습니다.",
+                );
+            } finally {
+                if (ticketPurchaseSubmit) {
+                    ticketPurchaseSubmit.disabled = false;
+                    ticketPurchaseSubmit.textContent = "티켓 구매하기";
+                }
             }
         });
 
@@ -1451,6 +1720,280 @@
             if (ticketPurchaseSubmit) {
                 ticketPurchaseSubmit.disabled = false;
                 ticketPurchaseSubmit.textContent = "티켓 구매하기";
+            }
+
+            startStoredPaymentPolling();
+        });
+
+
+        // =====================================
+        // 최신 결제 시도 상태 폴링
+        // =====================================
+
+        const paymentResultModal =
+            document.getElementById("payment-result-modal");
+        const paymentResultSuccessView =
+            document.getElementById("payment-result-success-view");
+        const paymentResultPendingView =
+            document.getElementById("payment-result-pending-view");
+        const paymentResultName =
+            document.getElementById("payment-result-name");
+        const paymentResultOrderId =
+            document.getElementById("payment-result-order-id");
+        const paymentResultPaymentName =
+            document.getElementById("payment-result-payment-name");
+        const paymentResultAmount =
+            document.getElementById("payment-result-amount");
+        const paymentResultQuantity =
+            document.getElementById("payment-result-quantity");
+        const paymentResultPaidAt =
+            document.getElementById("payment-result-paid-at");
+
+        let paymentPollTimer = null;
+        let paymentPollAttempts = 0;
+        let paymentStatusRequestInProgress = false;
+
+        function getPaymentStatusApiUrl(paymentId, ticketUserId) {
+            return (
+                `${API_BASE}/ticket-payments/` +
+                `${encodeURIComponent(paymentId)}/status` +
+                `?ticket_user_id=${encodeURIComponent(ticketUserId)}`
+            );
+        }
+
+        function readStoredPayment() {
+            const storedValue = localStorage.getItem(
+                PAYMENT_STATUS_STORAGE_KEY,
+            );
+
+            if (!storedValue) return null;
+
+            try {
+                const parsed = JSON.parse(storedValue);
+                const paymentId = Number(parsed?.paymentId);
+                const ticketUserId = Number(parsed?.ticketUserId);
+
+                if (
+                    !Number.isInteger(paymentId) ||
+                    paymentId <= 0 ||
+                    !Number.isInteger(ticketUserId) ||
+                    ticketUserId <= 0
+                ) {
+                    throw new Error("Invalid stored payment data");
+                }
+
+                return {
+                    paymentId,
+                    ticketUserId,
+                    createdAt: Number(parsed?.createdAt) || null,
+                };
+            } catch (error) {
+                console.warn("Invalid stored payment data:", error);
+                localStorage.removeItem(PAYMENT_STATUS_STORAGE_KEY);
+                return null;
+            }
+        }
+
+        function stopPaymentPolling() {
+            if (paymentPollTimer !== null) {
+                window.clearInterval(paymentPollTimer);
+                paymentPollTimer = null;
+            }
+        }
+
+        function formatPaymentAmount(value) {
+            const amount = Number(value);
+
+            if (!Number.isFinite(amount)) return "-";
+
+            return `${amount.toLocaleString("ko-KR")}원`;
+        }
+
+        function formatPaymentResultDate(value) {
+            if (!value) return "-";
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) return "-";
+
+            return new Intl.DateTimeFormat("ko-KR", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+            }).format(date);
+        }
+
+        function showPaymentResultView(viewName) {
+            if (paymentResultSuccessView) {
+                paymentResultSuccessView.hidden =
+                    viewName !== "success";
+            }
+
+            if (paymentResultPendingView) {
+                paymentResultPendingView.hidden =
+                    viewName !== "pending";
+            }
+        }
+
+        function openPaymentResultModal(viewName) {
+            if (!paymentResultModal) return;
+
+            showPaymentResultView(viewName);
+            lockPageScroll();
+
+            paymentResultModal.classList.add("is-open");
+            paymentResultModal.setAttribute("aria-hidden", "false");
+        }
+
+        function closePaymentResultModal() {
+            if (
+                !paymentResultModal ||
+                !paymentResultModal.classList.contains("is-open")
+            ) {
+                return;
+            }
+
+            paymentResultModal.classList.remove("is-open");
+            paymentResultModal.setAttribute("aria-hidden", "true");
+            unlockPageScroll();
+        }
+
+        function renderPaymentSuccess(payment) {
+            if (paymentResultName) {
+                paymentResultName.textContent = payment.name || "-";
+            }
+
+            if (paymentResultOrderId) {
+                paymentResultOrderId.textContent = payment.order_id || "-";
+            }
+
+            if (paymentResultPaymentName) {
+                paymentResultPaymentName.textContent =
+                    payment.payment_name || "-";
+            }
+
+            if (paymentResultAmount) {
+                paymentResultAmount.textContent =
+                    formatPaymentAmount(payment.amount);
+            }
+
+            if (paymentResultQuantity) {
+                paymentResultQuantity.textContent =
+                    `${payment.quantity ?? 1}장`;
+            }
+
+            if (paymentResultPaidAt) {
+                paymentResultPaidAt.textContent =
+                    formatPaymentResultDate(payment.paid_at);
+            }
+
+            openPaymentResultModal("success");
+        }
+
+        async function requestStoredPaymentStatus() {
+            if (paymentStatusRequestInProgress) return;
+
+            const storedPayment = readStoredPayment();
+
+            if (!storedPayment) {
+                stopPaymentPolling();
+                return;
+            }
+
+            paymentStatusRequestInProgress = true;
+
+            try {
+                const response = await fetch(
+                    getPaymentStatusApiUrl(
+                        storedPayment.paymentId,
+                        storedPayment.ticketUserId,
+                    ),
+                    {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                        },
+                        cache: "no-store",
+                    },
+                );
+
+                if (response.status === 404) {
+                    // 저장값이 잘못됐거나 서버에 해당 결제가 없는 경우에는
+                    // 더 이상 자동 조회하지 않는다.
+                    localStorage.removeItem(PAYMENT_STATUS_STORAGE_KEY);
+                    stopPaymentPolling();
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error(
+                        `결제 상태 조회 실패: ${response.status}`,
+                    );
+                }
+
+                const payment = await response.json();
+
+                if (
+                    payment.status_code === "PAID" ||
+                    (
+                        payment.is_completed === true &&
+                        payment.is_success === true
+                    )
+                ) {
+                    // 성공 모달을 한 번 표시한 뒤에는 자동 추적값을 제거한다.
+                    localStorage.removeItem(PAYMENT_STATUS_STORAGE_KEY);
+                    stopPaymentPolling();
+                    renderPaymentSuccess(payment);
+                    return;
+                }
+
+                paymentPollAttempts += 1;
+
+                if (
+                    payment.status_code === "READY" &&
+                    paymentPollAttempts >= PAYMENT_POLL_MAX_ATTEMPTS
+                ) {
+                    // 실패로 확정하지 않는다. 추후 새로고침/재접속 시
+                    // 다시 확인할 수 있도록 localStorage 값은 유지한다.
+                    stopPaymentPolling();
+                    openPaymentResultModal("pending");
+                }
+            } catch (error) {
+                console.error("Payment status check failed:", error);
+                paymentPollAttempts += 1;
+
+                if (
+                    paymentPollAttempts >= PAYMENT_POLL_MAX_ATTEMPTS
+                ) {
+                    stopPaymentPolling();
+                    openPaymentResultModal("pending");
+                }
+            } finally {
+                paymentStatusRequestInProgress = false;
+            }
+        }
+
+        function startStoredPaymentPolling() {
+            if (!readStoredPayment()) return;
+
+            stopPaymentPolling();
+            paymentPollAttempts = 0;
+
+            requestStoredPaymentStatus();
+
+            paymentPollTimer = window.setInterval(
+                requestStoredPaymentStatus,
+                PAYMENT_POLL_INTERVAL_MS,
+            );
+        }
+
+        paymentResultModal?.addEventListener("click", (event) => {
+            if (event.target.closest("[data-payment-result-close]")) {
+                closePaymentResultModal();
             }
         });
 
@@ -2212,6 +2755,7 @@
 
 
         await initializeSpeakers();
+        startStoredPaymentPolling();
 
         const targetDate =
             new Date("2026-07-25T11:00:00+09:00").getTime();
