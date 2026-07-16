@@ -985,14 +985,6 @@
         >
             <button
                     type="button"
-                    class="speaker-modal-close"
-                    aria-label="연사 상세 닫기"
-            >
-                ×
-            </button>
-
-            <button
-                    type="button"
                     class="speaker-modal-nav speaker-modal-prev"
                     aria-label="이전 연사"
             >
@@ -1808,17 +1800,10 @@
                         detailSwiper.slideTo(index, 0, false);
                     }
 
-                    const desktopCloseButton =
-                        modal?.querySelector(".speaker-modal-close");
-                    const mobileCloseButton =
+                    const currentCardCloseButton =
                         getCurrentDetailSlide()?.querySelector(".speaker-detail-close");
 
-                    const closeButtonToFocus =
-                        window.matchMedia("(min-width: 768px)").matches
-                            ? desktopCloseButton
-                            : mobileCloseButton;
-
-                    closeButtonToFocus?.focus({ preventScroll: true });
+                    currentCardCloseButton?.focus({ preventScroll: true });
                 });
             });
         }
@@ -2058,12 +2043,25 @@
         }
 
         modal?.addEventListener("click", (event) => {
-            const closeButton = event.target.closest(".speaker-detail-close, .speaker-modal-close");
+            const closeButton = event.target.closest(".speaker-detail-close");
 
-            if (!closeButton) return;
+            if (closeButton) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeSpeakerModal();
+                return;
+            }
+
+            // 실제 상세 카드와 좌우 화살표만 클릭 유지 영역으로 둡니다.
+            // 카드와 화살표 사이를 포함한 나머지 빈 공간은 클릭 시 닫습니다.
+            if (
+                event.target.closest(".speaker-detail-card") ||
+                event.target.closest(".speaker-modal-nav")
+            ) {
+                return;
+            }
 
             event.preventDefault();
-            event.stopPropagation();
             closeSpeakerModal();
         });
 
@@ -3105,6 +3103,18 @@
             const orderId =
                 payment.order_id || "주문번호 확인 중";
 
+            const statusName =
+                payment.status_name ||
+                (
+                    Number(payment.status) === 2
+                        ? "결제 완료"
+                        : Number(payment.status) === 3
+                            ? "결제 실패"
+                            : Number(payment.status) === 4
+                                ? "결제 취소"
+                                : "상태 확인 필요"
+                );
+
             paymentHistoryCustomerName.textContent =
                 paymentHistoryData.name || "";
 
@@ -3121,6 +3131,11 @@
                         <div>
                             <dt>주문 번호</dt>
                             <dd>${escapeHtml(orderId)}</dd>
+                        </div>
+
+                        <div>
+                            <dt>결제 상태</dt>
+                            <dd>${escapeHtml(statusName)}</dd>
                         </div>
 
                         <div>
@@ -3283,21 +3298,20 @@
                         return;
                     }
 
-                    const paidPayments =
+                    // 백엔드에서 READY(1)를 제외한 결제 완료/실패/취소 내역을
+                    // 이미 내려주므로 프론트에서 status === 2로 다시 제한하지 않는다.
+                    const visiblePayments =
                         Array.isArray(result?.payments)
-                            ? result.payments.filter(
-                                (payment) =>
-                                    Number(payment.status) === 2,
-                            )
+                            ? result.payments
                             : [];
 
-                    if (paidPayments.length === 0) {
+                    if (visiblePayments.length === 0) {
                         showPaymentHistoryView("empty");
                         return;
                     }
 
                     paymentHistoryData = result;
-                    paidPaymentHistoryItems = paidPayments;
+                    paidPaymentHistoryItems = visiblePayments;
                     currentPaymentHistoryIndex = 0;
 
                     renderPaymentHistoryPage(0);

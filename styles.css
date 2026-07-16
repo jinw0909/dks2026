@@ -4769,64 +4769,64 @@ body.modal-open {
 }
 
 /* =========================================================
-   Countdown layer + speaker modal desktop close refinements
+   Countdown layer + speaker detail controls
 ========================================================= */
 
 /*
- * 카운트다운은 이제 hero 내부가 아니라 body 직속 요소이므로
- * 메인 스와이퍼/일반 콘텐츠보다 위에 안정적으로 표시됩니다.
- * 디테일 슬라이더 및 기타 모달(z-index 9999 이상)보다는 아래입니다.
+ * 카운트다운은 메인 콘텐츠보다 위에 표시되고,
+ * 연사 상세 모달 및 기타 모달보다는 아래에 표시됩니다.
  */
 .countdown {
     z-index: 9000;
 }
 
-/* PC: 카드별 닫기 버튼은 숨기고 모달 공통 닫기 버튼만 표시 */
-.speaker-modal-close {
-    position: absolute;
-    top: 55px;
-    left: calc(50% + 245px);
-    z-index: 30;
+/* 모든 해상도에서 각 상세 카드 내부 닫기 버튼을 사용합니다. */
+.speaker-detail-close {
     display: grid;
-    width: 64px;
-    height: 64px;
-    place-items: center;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.36);
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 48px;
-    font-weight: 300;
-    line-height: 1;
-    cursor: pointer;
-    transition:
-            color 160ms ease,
-            background 160ms ease,
-            transform 160ms ease;
 }
 
-.speaker-modal-close:hover,
-.speaker-modal-close:focus-visible {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    outline: none;
-    transform: scale(1.06);
-}
-
+/* PC: 좌우 화살표의 클릭 영역과 아이콘을 키우고 카드 중앙보다 위에 배치합니다. */
 @media (min-width: 768px) {
-    .speaker-detail-close {
-        display: none;
+    .speaker-modal-nav {
+        top: 42%;
+        width: 88px;
+        height: 112px;
+        display: grid;
+        place-items: center;
+        font-size: 76px;
+        line-height: 1;
+        transform: translateY(-50%);
+    }
+
+    .speaker-modal-prev {
+        left: 34px;
+    }
+
+    .speaker-modal-next {
+        right: 34px;
     }
 }
 
-/* 모바일: 기존처럼 현재 카드 안쪽의 X 버튼 사용 */
-@media (max-width: 767px) {
-    .speaker-modal-close {
-        display: none;
+/* =========================================================
+   Speaker detail modal: PC navigation and empty-area closing
+   ========================================================= */
+@media (min-width: 1024px) {
+    .speaker-modal-nav {
+        top: calc(50% - 210px);
+        width: 104px;
+        height: 140px;
+        font-size: 100px;
+        line-height: 1;
+        display: grid;
+        place-items: center;
+        transform: translateY(-50%);
     }
 
-    .speaker-detail-close {
-        display: grid;
+    .speaker-modal-prev {
+        left: 48px;
+    }
+
+    .speaker-modal-next {
+        right: 48px;
     }
 }
