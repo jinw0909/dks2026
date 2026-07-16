@@ -66,6 +66,45 @@
     </div>
 </header>
 
+<div class="countdown" aria-label="사전 등록 마감까지 남은 시간">
+    <span>컨퍼런스 시작까지</span>
+    <div class="countdown-time">
+        <div class="time-block">
+            <strong id="d-day">00</strong>
+            <small>일</small>
+        </div>
+
+        <span class="separator">:</span>
+
+        <div class="time-block">
+            <strong id="d-hour">00</strong>
+            <small>시간</small>
+        </div>
+
+        <span class="separator">:</span>
+
+        <div class="time-block">
+            <strong id="d-min">00</strong>
+            <small>분</small>
+        </div>
+
+        <span class="separator">:</span>
+
+        <div class="time-block">
+            <strong id="d-sec">00</strong>
+            <small>초</small>
+        </div>
+    </div>
+
+    <button
+            type="button"
+            class="countdown-purchase" data-scroll-to-tickets
+    >
+        <span>티켓 구매하기</span>
+        <!--                    <strong>바로가기</strong>-->
+    </button>
+</div>
+
 <main id="top">
     <section class="hero">
         <!-- <div class="orb orb-left" aria-hidden="true"></div> -->
@@ -80,45 +119,6 @@
                 1,500명 이상의 트레이더, 빌더, 투자자와 디지털자산의 현재와 미래를
                 이야기하세요.
             </p>
-
-            <div class="countdown" aria-label="사전 등록 마감까지 남은 시간">
-                <span>컨퍼런스 시작까지</span>
-                <div class="countdown-time">
-                    <div class="time-block">
-                        <strong id="d-day">00</strong>
-                        <small>일</small>
-                    </div>
-
-                    <span class="separator">:</span>
-
-                    <div class="time-block">
-                        <strong id="d-hour">00</strong>
-                        <small>시간</small>
-                    </div>
-
-                    <span class="separator">:</span>
-
-                    <div class="time-block">
-                        <strong id="d-min">00</strong>
-                        <small>분</small>
-                    </div>
-
-                    <span class="separator">:</span>
-
-                    <div class="time-block">
-                        <strong id="d-sec">00</strong>
-                        <small>초</small>
-                    </div>
-                </div>
-
-                <button
-                        type="button"
-                        class="countdown-purchase js-open-ticket-modal"
-                >
-                    <span>티켓 구매하기</span>
-                    <!--                    <strong>바로가기</strong>-->
-                </button>
-            </div>
         </div>
     </section>
 
@@ -983,6 +983,13 @@
                 aria-modal="true"
                 aria-label="연사 상세 정보"
         >
+            <button
+                    type="button"
+                    class="speaker-modal-close"
+                    aria-label="연사 상세 닫기"
+            >
+                ×
+            </button>
 
             <button
                     type="button"
@@ -1801,9 +1808,17 @@
                         detailSwiper.slideTo(index, 0, false);
                     }
 
-                    const activeCloseButton =
+                    const desktopCloseButton =
+                        modal?.querySelector(".speaker-modal-close");
+                    const mobileCloseButton =
                         getCurrentDetailSlide()?.querySelector(".speaker-detail-close");
-                    activeCloseButton?.focus({ preventScroll: true });
+
+                    const closeButtonToFocus =
+                        window.matchMedia("(min-width: 768px)").matches
+                            ? desktopCloseButton
+                            : mobileCloseButton;
+
+                    closeButtonToFocus?.focus({ preventScroll: true });
                 });
             });
         }
@@ -2043,7 +2058,7 @@
         }
 
         modal?.addEventListener("click", (event) => {
-            const closeButton = event.target.closest(".speaker-detail-close");
+            const closeButton = event.target.closest(".speaker-detail-close, .speaker-modal-close");
 
             if (!closeButton) return;
 
@@ -2074,6 +2089,30 @@
         const ticketPhoneInput =
             ticketPurchaseForm?.querySelector('input[name="phone"]');
 
+        function showTicketPurchaseError(message, fieldName = null) {
+            if (!ticketPurchaseError) return;
+
+            ticketPurchaseError.textContent =
+                message || "결제 준비 중 오류가 발생했습니다.";
+            ticketPurchaseError.hidden = false;
+
+            if (fieldName) {
+                ticketPurchaseForm
+                    ?.querySelector(`[name="${fieldName}"]`)
+                    ?.focus({ preventScroll: true });
+            }
+        }
+
+        function hideTicketPurchaseError() {
+            if (!ticketPurchaseError) return;
+
+            ticketPurchaseError.textContent = "";
+            ticketPurchaseError.hidden = true;
+        }
+
+        ticketPurchaseForm?.addEventListener("input", hideTicketPurchaseError);
+        ticketPurchaseForm?.addEventListener("change", hideTicketPurchaseError);
+
         ticketPhoneInput?.addEventListener("input", (event) => {
             const input = event.currentTarget;
 
@@ -2102,8 +2141,7 @@
             if (!ticketPurchaseModal || !ticketPurchaseForm) return;
 
             ticketPurchaseForm.reset();
-            ticketPurchaseError.hidden = true;
-            ticketPurchaseError.textContent = "";
+            hideTicketPurchaseError();
             ticketPurchaseSubmit.disabled = false;
             ticketPurchaseSubmit.textContent = "티켓 구매하기";
 
@@ -2130,6 +2168,16 @@
 
             unlockPageScroll();
         }
+
+        document.querySelector("[data-scroll-to-tickets]")?.addEventListener(
+            "click",
+            () => {
+                document.getElementById("tickets")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            },
+        );
 
         document.querySelectorAll(".js-open-ticket-modal").forEach((button) => {
             button.addEventListener("click", openTicketPurchaseModal);
@@ -2173,7 +2221,17 @@
             }
 
             if (!phone) {
-                showTicketPurchaseError("연락처를 입력해 주세요.");
+                showTicketPurchaseError("연락처를 입력해 주세요.", "phone");
+                return;
+            }
+
+            const phoneNumbers = phone.replace(/\D/g, "");
+
+            if (!/^010\d{8}$/.test(phoneNumbers)) {
+                showTicketPurchaseError(
+                    "올바른 휴대전화 번호를 입력해주세요.",
+                    "phone",
+                );
                 return;
             }
 
@@ -2259,10 +2317,7 @@
                 </body>
             `;
 
-            if (ticketPurchaseError) {
-                ticketPurchaseError.hidden = true;
-                ticketPurchaseError.textContent = "";
-            }
+            hideTicketPurchaseError();
 
             if (ticketPurchaseSubmit) {
                 ticketPurchaseSubmit.disabled = true;
@@ -2289,13 +2344,33 @@
                     },
                 );
 
-                const result = await response.json();
+                const result = await response.json().catch(() => null);
 
                 if (!response.ok) {
-                    throw new Error(
-                        result?.detail ||
-                        "결제 정보를 준비하지 못했습니다.",
-                    );
+                    let message = "결제 정보를 준비하지 못했습니다.";
+                    let fieldName = null;
+
+                    if (Array.isArray(result?.detail)) {
+                        const firstError = result.detail[0];
+
+                        message = result.detail
+                            .map((item) =>
+                                String(item?.msg || "")
+                                    .replace(/^Value error,\s*/i, "")
+                                    .trim(),
+                            )
+                            .filter(Boolean)
+                            .join("\n") || message;
+
+                        fieldName =
+                            firstError?.loc?.[firstError.loc.length - 1] || null;
+                    } else if (typeof result?.detail === "string") {
+                        message = result.detail;
+                    }
+
+                    const requestError = new Error(message);
+                    requestError.fieldName = fieldName;
+                    throw requestError;
                 }
 
                 if (
@@ -2336,6 +2411,7 @@
                     error instanceof Error
                         ? error.message
                         : "결제 준비 중 오류가 발생했습니다.",
+                    error?.fieldName || null,
                 );
             } finally {
                 if (ticketPurchaseSubmit) {
@@ -3576,5 +3652,54 @@
     });
 </script>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const countdown = document.querySelector(".countdown");
+        const faqSection = document.getElementById("faq");
+
+        if (!countdown || !faqSection) return;
+
+        const updateCountdownVisibility = () => {
+            const faqRect = faqSection.getBoundingClientRect();
+            const viewportHeight =
+                window.visualViewport?.height || window.innerHeight;
+
+            const isFaqVisible =
+                faqRect.top < viewportHeight &&
+                faqRect.bottom > 0;
+
+            countdown.classList.toggle(
+                "is-hidden-at-faq",
+                isFaqVisible,
+            );
+        };
+
+        let ticking = false;
+
+        const requestVisibilityUpdate = () => {
+            if (ticking) return;
+
+            ticking = true;
+            window.requestAnimationFrame(() => {
+                updateCountdownVisibility();
+                ticking = false;
+            });
+        };
+
+        updateCountdownVisibility();
+
+        window.addEventListener(
+            "scroll",
+            requestVisibilityUpdate,
+            { passive: true },
+        );
+        window.addEventListener("resize", requestVisibilityUpdate);
+        window.visualViewport?.addEventListener(
+            "resize",
+            requestVisibilityUpdate,
+        );
+    });
+</script>
 </body>
 </html>

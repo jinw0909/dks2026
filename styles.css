@@ -4616,3 +4616,217 @@ body.modal-open {
         font-size: 16px;
     }
 }
+
+/* =========================================================
+   Fixed Countdown Bar
+   - 화면 하단 고정
+   - 모든 모달보다 낮은 레이어
+   - FAQ가 보이는 동안 숨김
+========================================================= */
+.countdown {
+    position: fixed;
+    left: 50%;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    z-index: 9000;
+    width: min(860px, calc(100vw - 40px));
+    min-height: 88px;
+    margin: 0;
+    /*padding: 14px 18px 14px 30px;*/
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    background: rgba(39, 44, 48, 0.92);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+            opacity 220ms ease,
+            visibility 220ms ease,
+            transform 220ms ease;
+}
+
+/* FAQ 영역이 화면에 들어오면 카운트다운 숨김 */
+.countdown.is-hidden-at-faq {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(24px);
+}
+
+/* 기존 hero 내부 배치용 여백 제거 */
+.hero .countdown {
+    margin: 0;
+}
+
+/* 모달은 최소 9999 이상이므로 카운트다운(z-index: 9000)보다 항상 앞에 표시됨 */
+.ticket-purchase-modal,
+.payment-history-modal,
+.payment-result-modal,
+.action-modal,
+.speaker-modal,
+.legal-modal {
+    isolation: isolate;
+}
+
+@media (max-width: 720px) {
+    .countdown {
+        left: 12px;
+        right: 12px;
+        bottom: max(10px, env(safe-area-inset-bottom));
+        width: auto;
+        min-height: 0;
+        padding: 10px 10px 10px 14px;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        gap: 10px;
+        border-radius: 12px;
+        transform: translateY(0);
+    }
+
+    .countdown.is-hidden-at-faq {
+        transform: translateY(24px);
+    }
+
+    .countdown > span:first-child {
+        display: none;
+    }
+
+    .countdown-time {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+        padding: 0;
+        gap: clamp(5px, 2vw, 10px);
+    }
+
+    .countdown .time-block {
+        flex: 0 1 auto;
+        min-width: 34px;
+        gap: 3px;
+    }
+
+    .countdown .time-block strong {
+        font-size: clamp(20px, 6vw, 28px);
+    }
+
+    .countdown .time-block small {
+        font-size: 9px;
+    }
+
+    .countdown .separator {
+        align-self: center;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .countdown-purchase {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 100px;
+        min-height: 48px;
+        margin: 0;
+        padding: 0 14px;
+        border-radius: 9px;
+    }
+
+    .countdown-purchase span {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 390px) {
+    .countdown {
+        left: 8px;
+        right: 8px;
+        padding-left: 10px;
+        gap: 6px;
+    }
+
+    .countdown-time {
+        gap: 4px;
+    }
+
+    .countdown .time-block {
+        min-width: 30px;
+    }
+
+    .countdown .time-block strong {
+        font-size: 20px;
+    }
+
+    .countdown-purchase {
+        min-width: 88px;
+        padding-inline: 10px;
+    }
+
+    .countdown-purchase span {
+        font-size: 12px;
+    }
+}
+
+/* =========================================================
+   Countdown layer + speaker modal desktop close refinements
+========================================================= */
+
+/*
+ * 카운트다운은 이제 hero 내부가 아니라 body 직속 요소이므로
+ * 메인 스와이퍼/일반 콘텐츠보다 위에 안정적으로 표시됩니다.
+ * 디테일 슬라이더 및 기타 모달(z-index 9999 이상)보다는 아래입니다.
+ */
+.countdown {
+    z-index: 9000;
+}
+
+/* PC: 카드별 닫기 버튼은 숨기고 모달 공통 닫기 버튼만 표시 */
+.speaker-modal-close {
+    position: absolute;
+    top: 55px;
+    left: calc(50% + 245px);
+    z-index: 30;
+    display: grid;
+    width: 64px;
+    height: 64px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.36);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+            color 160ms ease,
+            background 160ms ease,
+            transform 160ms ease;
+}
+
+.speaker-modal-close:hover,
+.speaker-modal-close:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    outline: none;
+    transform: scale(1.06);
+}
+
+@media (min-width: 768px) {
+    .speaker-detail-close {
+        display: none;
+    }
+}
+
+/* 모바일: 기존처럼 현재 카드 안쪽의 X 버튼 사용 */
+@media (max-width: 767px) {
+    .speaker-modal-close {
+        display: none;
+    }
+
+    .speaker-detail-close {
+        display: grid;
+    }
+}
