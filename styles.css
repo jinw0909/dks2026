@@ -4830,3 +4830,20 @@ body.modal-open {
         right: 48px;
     }
 }
+
+/* 결제 내역 상태 문구 */
+.payment-history-status {
+    font-weight: 800;
+}
+
+.payment-history-status.is-canceled {
+    color: #ff5c5c;
+}
+
+.payment-history-status.is-failed {
+    color: #4da3ff;
+}
+
+.payment-history-status.is-paid {
+    color: inherit;
+}
