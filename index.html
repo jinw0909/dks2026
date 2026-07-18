@@ -678,7 +678,7 @@
                         </div>
                         <div>
                             <dt>주문 번호</dt>
-                            <dd id="payment-result-order-id">-</dd>
+                            <dd id="payment-result-display-order-id">-</dd>
                         </div>
                         <div>
                             <dt>결제 상품</dt>
@@ -1442,12 +1442,12 @@
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         // 로컬 API 사용
-        // const API_BASE =
-        //     "http://127.0.0.1:8000/api/public";
+        const API_BASE =
+            "http://127.0.0.1:8000/api/public";
 
         // 실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
-        const API_BASE =
-            "https://api.digitalassetkoreasummit.com/api/public";
+        // const API_BASE =
+        //     "https://api.digitalassetkoreasummit.com/api/public";
 
         const SPEAKER_API_URL =
             `${API_BASE}/speakers`;
@@ -2448,8 +2448,8 @@
             document.getElementById("payment-result-success-view");
         const paymentResultName =
             document.getElementById("payment-result-name");
-        const paymentResultOrderId =
-            document.getElementById("payment-result-order-id");
+        const paymentResultDisplayOrderId =
+            document.getElementById("payment-result-display-order-id");
         const paymentResultPaymentName =
             document.getElementById("payment-result-payment-name");
         const paymentResultAmount =
@@ -2483,8 +2483,12 @@
         //     );
         // }
         function getPaymentWebSocketUrl(paymentId) {
+            // return (
+            //     `wss://api.digitalassetkoreasummit.com` +
+            //     `/ws/payment/${encodeURIComponent(paymentId)}`
+            // );
             return (
-                `wss://api.digitalassetkoreasummit.com` +
+                `ws://127.0.0.1:8000` +
                 `/ws/payment/${encodeURIComponent(paymentId)}`
             );
         }
@@ -2606,8 +2610,9 @@
                 paymentResultName.textContent = payment.name || "-";
             }
 
-            if (paymentResultOrderId) {
-                paymentResultOrderId.textContent = payment.order_id || "-";
+            if (paymentResultDisplayOrderId) {
+                paymentResultDisplayOrderId.textContent =
+                    payment.display_order_id || "-";
             }
 
             if (paymentResultPaymentName) {
@@ -3100,8 +3105,8 @@
                     )
                     : 1;
 
-            const orderId =
-                payment.order_id || "주문번호 확인 중";
+            const displayOrderId =
+                payment.display_order_id || "주문번호 확인 중";
 
             const numericStatus = Number(payment.status);
 
@@ -3141,7 +3146,7 @@
 
                         <div>
                             <dt>주문 번호</dt>
-                            <dd>${escapeHtml(orderId)}</dd>
+                            <dd>${escapeHtml(displayOrderId)}</dd>
                         </div>
 
                         <div>
