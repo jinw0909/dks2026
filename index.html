@@ -432,6 +432,7 @@
                 <video
                     id="event-movie"
                     class="event-movie-video"
+                    muted
                     controls
                     loop
                     playsinline>
@@ -1469,19 +1470,45 @@
         const eventMovie = document.getElementById("event-movie");
 
         if (eventMovie) {
+            let hasUserInteracted = false;
+
+            const markUserInteraction = () => {
+                hasUserInteracted = true;
+
+                document.removeEventListener("pointerdown", markUserInteraction);
+                document.removeEventListener("keydown", markUserInteraction);
+            };
+
+            document.addEventListener("pointerdown", markUserInteraction, {
+                once: true,
+            });
+
+            document.addEventListener("keydown", markUserInteraction, {
+                once: true,
+            });
+
             const eventMovieObserver = new IntersectionObserver(
                 async ([entry]) => {
-                    if (entry.isIntersecting) {
-                        eventMovie.muted = false;
+                    if (!entry.isIntersecting) {
+                        eventMovie.pause();
+                        return;
+                    }
+
+                    // 상호작용 전에는 음소거 자동재생
+                    // 상호작용 후에는 소리 켜고 재생 시도
+                    eventMovie.muted = !hasUserInteracted;
+
+                    try {
+                        await eventMovie.play();
+                    } catch (error) {
+                        // 소리 재생이 거부되면 음소거 상태로 다시 재생
+                        eventMovie.muted = true;
 
                         try {
                             await eventMovie.play();
-                        } catch (error) {
-                            // 브라우저가 소리 있는 자동재생을 차단한 경우
-                            console.log("영상 자동재생이 차단되었습니다.", error);
+                        } catch (mutedError) {
+                            console.log("영상 자동재생이 차단되었습니다.", mutedError);
                         }
-                    } else {
-                        eventMovie.pause();
                     }
                 },
                 {
