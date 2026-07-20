@@ -314,6 +314,7 @@ h2 {
     border-radius: 12px;
     background: rgba(71, 76, 80, 0.86);
     padding: 16px 48px;
+    border: 0;
 }
 .countdown-time {
     display: flex;
