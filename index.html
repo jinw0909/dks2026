@@ -417,6 +417,25 @@
         </div>
     </section>
 
+
+    <section class="event-movie" aria-label="2026 Digital Asset Korea Summit 영상">
+        <div class="container event-movie-container">
+            <div class="event-movie-frame">
+                <video
+                        class="event-movie-video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="auto"
+                >
+                    <source src="./assets/dksmovie.mp4" type="video/mp4" />
+                    사용 중인 브라우저에서는 동영상 재생을 지원하지 않습니다.
+                </video>
+            </div>
+        </div>
+    </section>
+
     <section class="section faq" id="faq">
         <div class="container faq-layout">
             <h2 class="michroma-regular">FAQ</h2>
@@ -1442,12 +1461,12 @@
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         // 로컬 API 사용
-        // const API_BASE =
-        //     "http://127.0.0.1:8000/api/public";
+        const API_BASE =
+            "http://127.0.0.1:8000/api/public";
 
         // 실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
-        const API_BASE =
-            "https://api.digitalassetkoreasummit.com/api/public";
+        // const API_BASE =
+        //     "https://api.digitalassetkoreasummit.com/api/public";
 
         const SPEAKER_API_URL =
             `${API_BASE}/speakers`;
@@ -2483,14 +2502,14 @@
         //     );
         // }
         function getPaymentWebSocketUrl(paymentId) {
-            return (
-                `wss://api.digitalassetkoreasummit.com` +
-                `/ws/payment/${encodeURIComponent(paymentId)}`
-            );
             // return (
-            //     `ws://127.0.0.1:8000` +
+            //     `wss://api.digitalassetkoreasummit.com` +
             //     `/ws/payment/${encodeURIComponent(paymentId)}`
             // );
+            return (
+                `ws://127.0.0.1:8000` +
+                `/ws/payment/${encodeURIComponent(paymentId)}`
+            );
         }
 
         function readStoredPayment() {

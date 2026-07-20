@@ -811,7 +811,8 @@ h2 {
 }
 
 .booths {
-    background: linear-gradient(180deg, #030506 70%, #08202b 100%);
+    background: #030506;
+    padding-bottom: 72px;
 }
 
 .booths h2 {
@@ -852,6 +853,44 @@ h2 {
 
 .orange-btn {
     background: var(--orange);
+}
+
+
+/* ==============================
+   Event Movie
+============================== */
+
+.event-movie {
+    position: relative;
+    overflow: hidden;
+    padding: 0 0 145px;
+    background: linear-gradient(
+            180deg,
+            #030506 0%,
+            #030506 70%,
+            #08202b 100%
+    );
+}
+
+.event-movie-container {
+    width: min(1440px, calc(100% - 48px));
+    max-width: none;
+    margin: 0 auto;
+}
+
+.event-movie-frame {
+    width: 100%;
+    overflow: hidden;
+    background: #030506;
+}
+
+.event-movie-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #030506;
 }
 
 .faq {
@@ -1013,6 +1052,24 @@ h2 {
 }
 
 @media (max-width: 720px) {
+    .booths {
+        padding-bottom: 48px;
+    }
+
+    .event-movie {
+        padding-bottom: 84px;
+    }
+
+    .event-movie-container {
+        width: 100%;
+    }
+
+    .event-movie-video {
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+    }
+
+
     .container {
         width: min(100% - 32px, var(--max));
     }
