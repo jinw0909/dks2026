@@ -1461,12 +1461,12 @@
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         // 로컬 API 사용
-        const API_BASE =
-            "http://127.0.0.1:8000/api/public";
-
-        // 실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
         // const API_BASE =
-        //     "https://api.digitalassetkoreasummit.com/api/public";
+        //     "http://127.0.0.1:8000/api/public";
+
+        //실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
+        const API_BASE =
+            "https://api.digitalassetkoreasummit.com/api/public";
 
         const SPEAKER_API_URL =
             `${API_BASE}/speakers`;
@@ -2502,14 +2502,14 @@
         //     );
         // }
         function getPaymentWebSocketUrl(paymentId) {
-            // return (
-            //     `wss://api.digitalassetkoreasummit.com` +
-            //     `/ws/payment/${encodeURIComponent(paymentId)}`
-            // );
             return (
-                `ws://127.0.0.1:8000` +
+                `wss://api.digitalassetkoreasummit.com` +
                 `/ws/payment/${encodeURIComponent(paymentId)}`
             );
+            // return (
+            //     `ws://127.0.0.1:8000` +
+            //     `/ws/payment/${encodeURIComponent(paymentId)}`
+            // );
         }
 
         function readStoredPayment() {
