@@ -635,7 +635,7 @@
 
                 <div class="ticket-price-box">
                     <span>결제 금액</span>
-                    <strong>19,000원</strong>
+                    <strong>19,900원</strong>
                     <small>(부가세 포함)</small>
                 </div>
 
@@ -2727,7 +2727,7 @@
                     Number.isFinite(amount) && amount > 0
                         ? Math.max(
                             1,
-                            Math.round(amount / 19000),
+                            Math.round(amount / TICKET_UNIT_PRICE),
                         )
                         : 1;
 
@@ -2996,7 +2996,7 @@
         const paymentHistoryPhoneInput =
             paymentHistoryForm?.querySelector('input[name="phone"]');
 
-        const TICKET_UNIT_PRICE = 19000;
+        const TICKET_UNIT_PRICE = 19900;
         const PAYMENT_PAGE_WINDOW_SIZE = 5;
 
         let paymentHistoryData = null;
