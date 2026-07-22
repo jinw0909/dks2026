@@ -4905,3 +4905,43 @@ body.modal-open {
 .payment-history-status.is-paid {
     color: inherit;
 }
+
+/* SOLD OUT 상태: 클릭 및 호버 동작 비활성화 */
+.countdown-purchase.is-sold-out,
+.ticket-actions .main-btn.is-sold-out {
+    cursor: default;
+    pointer-events: none;
+    user-select: none;
+}
+
+.countdown-purchase.is-sold-out:hover,
+.countdown-purchase.is-sold-out:active,
+.ticket-actions .main-btn.is-sold-out:hover,
+.ticket-actions .main-btn.is-sold-out:active {
+    filter: none;
+    transform: none;
+}
+
+/* SOLD OUT 상태 시각 처리: 기존 청록 계열을 유지하면서 채도와 밝기만 낮춤 */
+.countdown-purchase.is-sold-out {
+    color: rgba(255, 255, 255, 0.88);
+    background: linear-gradient(135deg, #58767d, #405e66);
+    box-shadow:
+            inset 1px 0 rgba(255, 255, 255, 0.09),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    opacity: 0.9;
+}
+
+.ticket-actions .main-btn.is-sold-out {
+    color: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, #50747c, #385b64);
+    box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+            0 8px 24px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
+}
+
+.countdown-purchase.is-sold-out span,
+.ticket-actions .main-btn.is-sold-out {
+    letter-spacing: 0.06em;
+}
