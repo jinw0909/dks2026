@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="ko">
 <head>
     <meta charset="utf-8" />
@@ -31,7 +32,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
     <!--    <link rel="stylesheet" href="./styles.css" />-->
-    <link rel="stylesheet" href="./styles.css?v=20260723-2" />
+    <link rel="stylesheet" href="./styles.css?v=20260723-3" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -1483,6 +1484,47 @@
     </div>
 </footer>
 
+
+<script>
+    (() => {
+        const targetDate =
+            new Date("2026-07-25T11:00:00+09:00").getTime();
+
+        const updateCountdown = () => {
+            const dDay = document.getElementById("d-day");
+            const dHour = document.getElementById("d-hour");
+            const dMin = document.getElementById("d-min");
+            const dSec = document.getElementById("d-sec");
+
+            if (!dDay || !dHour || !dMin || !dSec) {
+                return;
+            }
+
+            const distance = Math.max(0, targetDate - Date.now());
+
+            const days = Math.floor(distance / 86400000);
+            const hours = Math.floor((distance % 86400000) / 3600000);
+            const minutes = Math.floor((distance % 3600000) / 60000);
+            const seconds = Math.floor((distance % 60000) / 1000);
+
+            dDay.textContent = String(days).padStart(2, "0");
+            dHour.textContent = String(hours).padStart(2, "0");
+            dMin.textContent = String(minutes).padStart(2, "0");
+            dSec.textContent = String(seconds).padStart(2, "0");
+        };
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", () => {
+                updateCountdown();
+                window.setInterval(updateCountdown, 1000);
+            }, { once: true });
+        } else {
+            updateCountdown();
+            window.setInterval(updateCountdown, 1000);
+        }
+    })();
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         const eventMovie = document.getElementById("event-movie");
@@ -1536,13 +1578,13 @@
 
             eventMovieObserver.observe(eventMovie);
         }
-        // 로컬 API 사용
-        // const API_BASE =
-        //     "http://127.0.0.1:8000/api/public";
+        //로컬 API 사용
+        const API_BASE =
+            "http://127.0.0.1:8000/api/public";
 
         //실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
-        const API_BASE =
-            "https://api.digitalassetkoreasummit.com/api/public";
+        // const API_BASE =
+        //     "https://api.digitalassetkoreasummit.com/api/public";
 
         const SPEAKER_API_URL =
             `${API_BASE}/speakers`;
@@ -1949,7 +1991,7 @@
         );
 
         function bindMainCardEvents() {
-            const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+            const canHover = window.matchMedia("(hover: hover)");
 
             document.querySelectorAll(".speaker-card").forEach((card) => {
                 const slide = card.closest(".speaker-slide");
@@ -1968,9 +2010,13 @@
                     }
                 };
 
-                const scheduleHoverOpen = () => {
+                const scheduleHoverOpen = (event) => {
+                    const isRealMouse =
+                        event?.pointerType === "mouse" ||
+                        event?.type === "mouseenter";
+
                     if (
-                        !canHover.matches ||
+                        (!canHover.matches && !isRealMouse) ||
                         isPointerPressed ||
                         suppressHoverUntilLeave ||
                         resolvingSpeakerHoverAfterModalClose ||
@@ -1996,6 +2042,9 @@
                     }, SPEAKER_HOVER_OPEN_DELAY_MS);
                 };
 
+                // 실제 마우스 진입을 우선 사용한다.
+                // 브라우저가 pointer:fine을 잘못 판정해도 PC 마우스 호버가 동작한다.
+                card.addEventListener("pointerenter", scheduleHoverOpen);
                 card.addEventListener("mouseenter", scheduleHoverOpen);
 
                 card.addEventListener("pointerdown", () => {
@@ -2024,8 +2073,12 @@
                 });
 
                 // 모바일/태블릿처럼 hover가 없는 환경에서는 기존 탭 동작 유지
-                card.addEventListener("click", () => {
-                    if (!canHover.matches) {
+                card.addEventListener("click", (event) => {
+                    const isMouseClick =
+                        event.detail > 0 &&
+                        window.matchMedia("(hover: hover)").matches;
+
+                    if (!isMouseClick) {
                         openSpeakerModal(speakerId, card);
                     }
                 });
@@ -2347,13 +2400,22 @@
              */
             paymentWindow.opener = null;
 
-            paymentWindow.document.documentElement.innerHTML = `
+            /*
+             * 모바일 브라우저에서는 about:blank가 먼저 데스크톱 뷰포트로
+             * 계산된 뒤 meta viewport를 동적으로 넣으면 축소된 상태가
+             * 유지될 수 있다. 완전한 문서를 처음부터 다시 작성한다.
+             */
+            paymentWindow.document.open();
+            paymentWindow.document.write(`
+                <!doctype html>
+                <html lang="ko">
                 <head>
                     <meta charset="utf-8">
                     <meta
                         name="viewport"
-                        content="width=device-width, initial-scale=1"
+                        content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
                     >
+                    <meta name="color-scheme" content="dark">
                     <title>결제 페이지 연결 중</title>
 
                     <style>
@@ -2361,44 +2423,88 @@
                             box-sizing: border-box;
                         }
 
+                        html,
+                        body {
+                            width: 100%;
+                            min-height: 100%;
+                        }
+
                         body {
                             min-height: 100vh;
+                            min-height: 100dvh;
                             margin: 0;
-                            display: grid;
-                            place-items: center;
+                            padding:
+                                max(24px, env(safe-area-inset-top))
+                                max(24px, env(safe-area-inset-right))
+                                max(24px, env(safe-area-inset-bottom))
+                                max(24px, env(safe-area-inset-left));
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
                             background: #030506;
                             color: #f7f7f7;
                             font-family:
                                 Pretendard,
                                 "Apple SD Gothic Neo",
+                                Arial,
                                 sans-serif;
+                            text-align: center;
+                            -webkit-text-size-adjust: 100%;
+                            text-size-adjust: 100%;
                         }
 
                         .payment-loading {
-                            text-align: center;
+                            width: min(100%, 420px);
+                            padding: 36px 24px;
+                        }
+
+                        .payment-spinner {
+                            width: 44px;
+                            height: 44px;
+                            margin: 0 auto 24px;
+                            border: 4px solid rgba(18, 184, 213, 0.22);
+                            border-top-color: #12b8d5;
+                            border-radius: 50%;
+                            animation: payment-spin 0.8s linear infinite;
                         }
 
                         .payment-loading strong {
                             display: block;
-                            margin-bottom: 10px;
-                            font-size: 18px;
+                            margin-bottom: 12px;
+                            font-size: clamp(22px, 6vw, 30px);
+                            line-height: 1.35;
+                            letter-spacing: -0.02em;
+                            word-break: keep-all;
                         }
 
                         .payment-loading p {
                             margin: 0;
                             color: #98a7b2;
-                            font-size: 14px;
+                            font-size: clamp(16px, 4.2vw, 19px);
+                            line-height: 1.5;
+                        }
+
+                        @keyframes payment-spin {
+                            to {
+                                transform: rotate(360deg);
+                            }
                         }
                     </style>
                 </head>
 
                 <body>
-                    <div class="payment-loading">
+                    <main class="payment-loading">
+                        <div
+                            class="payment-spinner"
+                            aria-hidden="true"
+                        ></div>
                         <strong>결제 페이지를 준비하고 있습니다.</strong>
                         <p>잠시만 기다려 주세요.</p>
-                    </div>
+                    </main>
                 </body>
-            `;
+                </html>
+            `);
+            paymentWindow.document.close();
 
             hideTicketPurchaseError();
 
@@ -2568,14 +2674,14 @@
         //     );
         // }
         function getPaymentWebSocketUrl(paymentId) {
-            return (
-                `wss://api.digitalassetkoreasummit.com` +
-                `/ws/payment/${encodeURIComponent(paymentId)}`
-            );
             // return (
-            //     `ws://127.0.0.1:8000` +
+            //     `wss://api.digitalassetkoreasummit.com` +
             //     `/ws/payment/${encodeURIComponent(paymentId)}`
             // );
+            return (
+                `ws://127.0.0.1:8000` +
+                `/ws/payment/${encodeURIComponent(paymentId)}`
+            );
         }
 
         function readStoredPayment() {
@@ -3732,40 +3838,6 @@
         await initializeSpeakers();
         startStoredPaymentSocket();
 
-        const targetDate =
-            new Date("2026-07-25T11:00:00+09:00").getTime();
-
-        function updateCountdown() {
-            const distance = targetDate - Date.now();
-
-            const dDay = document.getElementById("d-day");
-            const dHour = document.getElementById("d-hour");
-            const dMin = document.getElementById("d-min");
-            const dSec = document.getElementById("d-sec");
-
-            if (!dDay || !dHour || !dMin || !dSec) return;
-
-            if (distance <= 0) {
-                dDay.textContent = "00";
-                dHour.textContent = "00";
-                dMin.textContent = "00";
-                dSec.textContent = "00";
-                return;
-            }
-
-            const days = Math.floor(distance / 86400000);
-            const hours = Math.floor((distance % 86400000) / 3600000);
-            const minutes = Math.floor((distance % 3600000) / 60000);
-            const seconds = Math.floor((distance % 60000) / 1000);
-
-            dDay.textContent = String(days).padStart(2, "0");
-            dHour.textContent = String(hours).padStart(2, "0");
-            dMin.textContent = String(minutes).padStart(2, "0");
-            dSec.textContent = String(seconds).padStart(2, "0");
-        }
-
-        updateCountdown();
-        window.setInterval(updateCountdown, 1000);
     });
 </script>
 
