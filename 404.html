@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <title>페이지를 찾을 수 없습니다 | Digital Asset Korea Summit</title>
+
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=Michroma&display=swap"
+          rel="stylesheet"
+  />
+  <link
+          rel="stylesheet"
+          crossorigin
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+  />
+
+  <style>
+    :root {
+      --black: #030506;
+      --white: #f7f7f7;
+      --muted: #a1b4c9;
+      --cyan: #12b8d5;
+      --orange: #f08200;
+      --line: rgba(141, 230, 255, 0.28);
+      --max: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--white);
+      background: var(--black);
+      font-family:
+              "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", Arial,
+              sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .michroma {
+      font-family: "Michroma", sans-serif;
+      font-weight: 400;
+    }
+
+    .site-header {
+      position: relative;
+      z-index: 10;
+      background: rgba(4, 17, 27, 0.28);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .header-inner {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .brand img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .home-link {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 600;
+      transition:
+              color 180ms ease,
+              transform 180ms ease;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible {
+      color: #dceaf6;
+      transform: translateY(-2px);
+    }
+
+    .error-main {
+      position: relative;
+      min-height: calc(100vh - 74px);
+      min-height: calc(100svh - 74px);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+      background:
+              radial-gradient(
+                      circle at 68% 30%,
+                      rgba(18, 184, 213, 0.2),
+                      transparent 24%
+              ),
+              radial-gradient(
+                      circle at 24% 75%,
+                      rgba(240, 130, 0, 0.11),
+                      transparent 23%
+              ),
+              url("/assets/DSK2026_BG.png") center / cover no-repeat,
+              #030506;
+    }
+
+    .error-main::before,
+    .error-main::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.68;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    .error-main::before {
+      top: 28px;
+      left: 0;
+      width: min(34vw, 440px);
+      height: 430px;
+      background-image: url("/assets/hero-left.png");
+      background-position: left top;
+    }
+
+    .error-main::after {
+      right: 0;
+      bottom: 0;
+      width: min(35vw, 470px);
+      height: 560px;
+      background-image: url("/assets/hero-right.png");
+      background-position: right bottom;
+    }
+
+    .error-content {
+      width: 100%;
+      padding: 100px 0 120px;
+      text-align: center;
+    }
+
+    .error-code {
+      margin: 0;
+      color: transparent;
+      font-size: clamp(108px, 18vw, 250px);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+      background:
+              linear-gradient(
+                      90deg,
+                      var(--orange) 12%,
+                      #f4dabc 49%,
+                      var(--cyan) 86%
+              );
+      background-clip: text;
+      -webkit-background-clip: text;
+      filter: drop-shadow(0 0 28px rgba(18, 184, 213, 0.14));
+    }
+
+    .error-label {
+      margin: 38px 0 0;
+      color: var(--orange);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .error-title {
+      margin: 15px 0 0;
+      font-size: clamp(30px, 4vw, 54px);
+      line-height: 1.2;
+      letter-spacing: -0.035em;
+    }
+
+    .error-description {
+      max-width: 620px;
+      margin: 22px auto 0;
+      color: #dee2e8;
+      font-size: 18px;
+      font-weight: 500;
+      word-break: keep-all;
+    }
+
+    .error-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 42px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      min-width: 190px;
+      min-height: 58px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 28px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      transition:
+              transform 180ms ease,
+              box-shadow 180ms ease,
+              border-color 180ms ease;
+    }
+
+    .primary-button {
+      background: var(--cyan);
+      color: #fff;
+      box-shadow: 0 12px 34px rgba(18, 184, 213, 0.18);
+    }
+
+    .secondary-button {
+      color: #dceaf6;
+      border: 1px solid var(--line);
+      background: rgba(7, 16, 20, 0.66);
+      backdrop-filter: blur(8px);
+    }
+
+    .primary-button:hover,
+    .primary-button:focus-visible,
+    .secondary-button:hover,
+    .secondary-button:focus-visible {
+      transform: translateY(-3px);
+    }
+
+    .secondary-button:hover,
+    .secondary-button:focus-visible {
+      border-color: rgba(141, 230, 255, 0.58);
+    }
+
+    .event-meta {
+      margin-top: 46px;
+      color: #98c3cc;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(100% - 32px, var(--max));
+      }
+
+      .header-inner {
+        min-height: 66px;
+      }
+
+      .brand img {
+        width: 150px;
+      }
+
+      .home-link {
+        font-size: 13px;
+      }
+
+      .error-main {
+        min-height: calc(100svh - 66px);
+      }
+
+      .error-main::before {
+        top: 26px;
+        width: 210px;
+        height: 250px;
+        opacity: 0.55;
+      }
+
+      .error-main::after {
+        width: 230px;
+        height: 320px;
+        opacity: 0.55;
+      }
+
+      .error-content {
+        padding: 82px 0 96px;
+      }
+
+      .error-code {
+        font-size: clamp(100px, 38vw, 170px);
+      }
+
+      .error-label {
+        margin-top: 28px;
+        font-size: 14px;
+      }
+
+      .error-title {
+        margin-top: 12px;
+        font-size: 30px;
+      }
+
+      .error-description {
+        margin-top: 18px;
+        font-size: 15px;
+      }
+
+      .error-actions {
+        flex-direction: column;
+        width: min(100%, 320px);
+        margin: 34px auto 0;
+      }
+
+      .primary-button,
+      .secondary-button {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .event-meta {
+        margin-top: 36px;
+        font-size: 11px;
+        line-height: 1.7;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Digital Asset Korea Summit 홈">
+      <img src="/assets/logo.png" alt="Digital Asset Korea Summit" />
+    </a>
+
+    <a class="home-link" href="/">HOME</a>
+  </div>
+</header>
+
+<main class="error-main">
+  <section class="container error-content" aria-labelledby="error-title">
+    <p class="error-code michroma" aria-hidden="true">404</p>
+    <p class="error-label">PAGE NOT FOUND</p>
+
+    <h1 class="error-title" id="error-title">
+      요청하신 페이지를 찾을 수 없습니다.
+    </h1>
+
+    <p class="error-description">
+      주소가 잘못 입력되었거나 페이지가 이동·삭제되었을 수 있습니다.
+      아래 버튼을 눌러 메인 페이지로 이동해 주세요.
+    </p>
+
+    <div class="error-actions">
+      <a class="primary-button" href="/">메인으로 돌아가기</a>
+    </div>
+
+    <p class="event-meta michroma">
+      2026 07 25 · AUDITORIUM COEX SEOUL
+    </p>
+  </section>
+</main>
+</body>
+</html>
