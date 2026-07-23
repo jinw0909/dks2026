@@ -2384,7 +2384,7 @@
              * 팝업으로 판단해 차단할 수 있다.
              */
             const paymentWindow = window.open(
-                "",
+                "/payment-loading.html",
                 "_blank",
             );
 
@@ -2394,117 +2394,12 @@
                 );
                 return;
             }
-
             /*
-             * 새 창에서 원래 페이지를 조작하지 못하게 차단
+             * 실제 정적 로딩 페이지를 먼저 열기 때문에
+             * 모바일에서도 올바른 viewport로 표시된다.
              */
             paymentWindow.opener = null;
 
-            /*
-             * 모바일 브라우저에서는 about:blank가 먼저 데스크톱 뷰포트로
-             * 계산된 뒤 meta viewport를 동적으로 넣으면 축소된 상태가
-             * 유지될 수 있다. 완전한 문서를 처음부터 다시 작성한다.
-             */
-            paymentWindow.document.open();
-            paymentWindow.document.write(`
-                <!doctype html>
-                <html lang="ko">
-                <head>
-                    <meta charset="utf-8">
-                    <meta
-                        name="viewport"
-                        content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
-                    >
-                    <meta name="color-scheme" content="dark">
-                    <title>결제 페이지 연결 중</title>
-
-                    <style>
-                        * {
-                            box-sizing: border-box;
-                        }
-
-                        html,
-                        body {
-                            width: 100%;
-                            min-height: 100%;
-                        }
-
-                        body {
-                            min-height: 100vh;
-                            min-height: 100dvh;
-                            margin: 0;
-                            padding:
-                                max(24px, env(safe-area-inset-top))
-                                max(24px, env(safe-area-inset-right))
-                                max(24px, env(safe-area-inset-bottom))
-                                max(24px, env(safe-area-inset-left));
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            background: #030506;
-                            color: #f7f7f7;
-                            font-family:
-                                Pretendard,
-                                "Apple SD Gothic Neo",
-                                Arial,
-                                sans-serif;
-                            text-align: center;
-                            -webkit-text-size-adjust: 100%;
-                            text-size-adjust: 100%;
-                        }
-
-                        .payment-loading {
-                            width: min(100%, 420px);
-                            padding: 36px 24px;
-                        }
-
-                        .payment-spinner {
-                            width: 44px;
-                            height: 44px;
-                            margin: 0 auto 24px;
-                            border: 4px solid rgba(18, 184, 213, 0.22);
-                            border-top-color: #12b8d5;
-                            border-radius: 50%;
-                            animation: payment-spin 0.8s linear infinite;
-                        }
-
-                        .payment-loading strong {
-                            display: block;
-                            margin-bottom: 12px;
-                            font-size: clamp(22px, 6vw, 30px);
-                            line-height: 1.35;
-                            letter-spacing: -0.02em;
-                            word-break: keep-all;
-                        }
-
-                        .payment-loading p {
-                            margin: 0;
-                            color: #98a7b2;
-                            font-size: clamp(16px, 4.2vw, 19px);
-                            line-height: 1.5;
-                        }
-
-                        @keyframes payment-spin {
-                            to {
-                                transform: rotate(360deg);
-                            }
-                        }
-                    </style>
-                </head>
-
-                <body>
-                    <main class="payment-loading">
-                        <div
-                            class="payment-spinner"
-                            aria-hidden="true"
-                        ></div>
-                        <strong>결제 페이지를 준비하고 있습니다.</strong>
-                        <p>잠시만 기다려 주세요.</p>
-                    </main>
-                </body>
-                </html>
-            `);
-            paymentWindow.document.close();
 
             hideTicketPurchaseError();
 
