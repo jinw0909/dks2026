@@ -1574,12 +1574,12 @@
             eventMovieObserver.observe(eventMovie);
         }
         //로컬 API 사용
-        const API_BASE =
-            "http://127.0.0.1:8000/api/public";
+        // const API_BASE =
+        //     "http://127.0.0.1:8000/api/public";
 
         //실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
-        // const API_BASE =
-        //     "https://api.digitalassetkoreasummit.com/api/public";
+        const API_BASE =
+            "https://api.digitalassetkoreasummit.com/api/public";
 
         const SPEAKER_API_URL =
             `${API_BASE}/speakers`;
@@ -2209,14 +2209,6 @@
         });
 
 
-        // 결제 완료 판정 UI는 사용하지 않는다.
-        // prepare 성공 후 동일한 탭에서 Toss LinkPay로 이동한다.
-        // const TICKET_PREPARE_API_URL =
-        //     location.hostname === "localhost" || location.hostname === "127.0.0.1"
-        //         ? "http://127.0.0.1:8000/api/public/ticket-payments/prepare"
-        //         : "https://api.digitalassetkoreasummit.com/api/public/ticket-payments/prepare";
-
-        // const TICKET_PREPARE_API_URL = "https://api.digitalassetkoreasummit.com/api/public/ticket-payments/prepare";
 
         const ticketPurchaseModal =
             document.getElementById("ticket-purchase-modal");
@@ -2569,14 +2561,14 @@
         //     );
         // }
         function getPaymentWebSocketUrl(paymentId) {
-            // return (
-            //     `wss://api.digitalassetkoreasummit.com` +
-            //     `/ws/payment/${encodeURIComponent(paymentId)}`
-            // );
             return (
-                `ws://127.0.0.1:8000` +
+                `wss://api.digitalassetkoreasummit.com` +
                 `/ws/payment/${encodeURIComponent(paymentId)}`
             );
+            // return (
+            //     `ws://127.0.0.1:8000` +
+            //     `/ws/payment/${encodeURIComponent(paymentId)}`
+            // );
         }
 
         function readStoredPayment() {
