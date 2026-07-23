@@ -345,7 +345,7 @@ h2 {
 }
 
 .countdown a {
-    height: 100%;
+    height: auto;
     display: grid;
     place-items: center;
     background: var(--cyan);
@@ -4944,4 +4944,32 @@ body.modal-open {
 .countdown-purchase.is-sold-out span,
 .ticket-actions .main-btn.is-sold-out {
     letter-spacing: 0.06em;
+}
+
+/* =========================================================
+   Fixed countdown PC layout fix
+   - 시간 영역이 구매 버튼 폭을 침범하지 않도록 조정
+========================================================= */
+@media (min-width: 721px) {
+    .countdown-time {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+    }
+
+    .countdown-purchase {
+        flex: 0 0 188px;
+        width: 188px;
+        min-width: 188px;
+        height: auto;
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 721px) and (max-width: 1180px) {
+    .countdown-purchase {
+        flex-basis: 170px;
+        width: 170px;
+        min-width: 170px;
+    }
 }
