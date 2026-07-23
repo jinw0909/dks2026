@@ -5072,3 +5072,20 @@ body.modal-open {
         justify-self: center;
     }
 }
+
+/* 하늘색 톤을 살린 딥 스카이 모던 스타일 */
+.countdown-purchase.sold-out,
+.main-btn.sold-out {
+    background: linear-gradient(135deg, #1e2b37 0%, #0f172a 100%) !important;
+    color: #38bdf8 !important; /* 하늘색 액센트 컬러 */
+    cursor: not-allowed !important;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1) !important;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    opacity: 0.9;
+}
