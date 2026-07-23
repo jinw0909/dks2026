@@ -4973,3 +4973,102 @@ body.modal-open {
         min-width: 170px;
     }
 }
+
+/* =========================================================
+   Partner cards unified width
+========================================================= */
+.partner-container {
+    width: min(900px, calc(100% - 48px));
+}
+
+.partner-group {
+    width: 100%;
+}
+
+.partner-row,
+.partner-row.primary,
+.partner-row-host,
+.partner-row-premium,
+.partner-row-sponsor,
+.partner-row-media {
+    display: grid;
+    grid-template-columns: repeat(3, 234px);
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    margin-inline: auto;
+}
+
+.partner-row-host {
+    grid-template-columns: repeat(2, 234px);
+}
+
+.partner-logo-card {
+    width: 234px;
+    min-width: 234px;
+    height: 94px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 24px;
+    border-radius: 10px;
+    background: #292c30;
+    overflow: hidden;
+}
+
+.partner-logo-card img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 54px;
+    object-fit: contain;
+}
+
+@media (max-width: 1024px) {
+    .partner-row,
+    .partner-row.primary,
+    .partner-row-host,
+    .partner-row-premium,
+    .partner-row-sponsor,
+    .partner-row-media {
+        grid-template-columns: repeat(2, minmax(0, 234px));
+    }
+
+    .partner-row-premium .partner-logo-card:last-child,
+    .partner-row-sponsor .partner-logo-card:last-child,
+    .partner-row-media .partner-logo-card:last-child {
+        grid-column: 1 / -1;
+        justify-self: center;
+    }
+}
+
+@media (max-width: 720px) {
+    .partner-container {
+        width: min(100% - 32px, 900px);
+    }
+
+    .partner-row,
+    .partner-row.primary,
+    .partner-row-host,
+    .partner-row-premium,
+    .partner-row-sponsor,
+    .partner-row-media {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .partner-row-premium .partner-logo-card:last-child,
+    .partner-row-sponsor .partner-logo-card:last-child,
+    .partner-row-media .partner-logo-card:last-child {
+        grid-column: auto;
+    }
+
+    .partner-logo-card {
+        width: 100%;
+        min-width: 0;
+        max-width: 320px;
+        height: 92px;
+        justify-self: center;
+    }
+}

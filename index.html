@@ -32,7 +32,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
     <!--    <link rel="stylesheet" href="./styles.css" />-->
-    <link rel="stylesheet" href="./styles.css?v=20260723-3" />
+    <link rel="stylesheet" href="./styles.css?v=20260723-4" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -360,11 +360,6 @@
                 <h3 class="partner-title">스폰서</h3>
 
                 <div class="partner-row partner-row-sponsor">
-                    <a class="partner-logo-card" href="https://www.wefi.co/"
-                       target="_blank" rel="noopener noreferrer">
-                        <img src="./assets/partner/sponsor/Wefi.svg" alt="WeFi" />
-                    </a>
-
                     <a class="partner-logo-card" href="https://career.iotrust.kr/"
                        target="_blank" rel="noopener noreferrer">
                         <img src="./assets/partner/sponsor/decent.png" alt="DCENT / 아이오트러스트" />
@@ -1579,12 +1574,12 @@
             eventMovieObserver.observe(eventMovie);
         }
         //로컬 API 사용
-        // const API_BASE =
-        //     "http://127.0.0.1:8000/api/public";
+        const API_BASE =
+            "http://127.0.0.1:8000/api/public";
 
         //실서버 API 사용 시 위 두 줄을 주석 처리하고 아래를 활성화
-        const API_BASE =
-            "https://api.digitalassetkoreasummit.com/api/public";
+        // const API_BASE =
+        //     "https://api.digitalassetkoreasummit.com/api/public";
 
         const SPEAKER_API_URL =
             `${API_BASE}/speakers`;
@@ -2383,10 +2378,15 @@
              * fetch 완료 후 window.open()을 호출하면 브라우저가
              * 팝업으로 판단해 차단할 수 있다.
              */
-            const paymentWindow = window.open(
-                "/payment-loading.html",
-                "_blank",
-            );
+            const paymentWindow = window.open("", "_blank");
+
+            if (paymentWindow) {
+                paymentWindow.document.documentElement.style.backgroundColor = "#030506";
+                paymentWindow.document.body.style.margin = "0";
+                paymentWindow.document.body.style.backgroundColor = "#030506";
+
+                paymentWindow.location.replace("/payment-loading.html");
+            }
 
             if (!paymentWindow) {
                 showTicketPurchaseError(
@@ -2569,14 +2569,14 @@
         //     );
         // }
         function getPaymentWebSocketUrl(paymentId) {
-            return (
-                `wss://api.digitalassetkoreasummit.com` +
-                `/ws/payment/${encodeURIComponent(paymentId)}`
-            );
             // return (
-            //     `ws://127.0.0.1:8000` +
+            //     `wss://api.digitalassetkoreasummit.com` +
             //     `/ws/payment/${encodeURIComponent(paymentId)}`
             // );
+            return (
+                `ws://127.0.0.1:8000` +
+                `/ws/payment/${encodeURIComponent(paymentId)}`
+            );
         }
 
         function readStoredPayment() {
