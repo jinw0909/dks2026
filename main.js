@@ -90,6 +90,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         const { API_ORIGIN, CONFERENCE_ID } = window.APP_CONFIG;
 
+        const TICKET_ID = Number(window.APP_CONFIG?.TICKET_ID ?? 1);
+
         const API_BASE = `${API_ORIGIN}/api/public`;
         const WS_ORIGIN = API_ORIGIN
             .replace(/^https:/, "wss:")
@@ -924,6 +926,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                             "Content-Type": "application/json",
                         },
                         body: JSON.stringify({
+                            conference_id: CONFERENCE_ID,
+                            ticket_id: TICKET_ID,
                             name,
                             phone,
                             country: country || null,
@@ -963,10 +967,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                     throw requestError;
                 }
 
+                const ticketRegistrationId = Number(
+                    result?.ticket_registration_id ??
+                    result?.ticket_user_id,
+                )
+
                 if (
                     !result?.redirect_url ||
                     !result?.payment_id ||
-                    !result?.ticket_user_id
+                    !Number.isInteger(ticketRegistrationId) ||
+                    ticketRegistrationId <= 0
                 ) {
                     throw new Error(
                         "결제 준비 정보를 받지 못했습니다.",
@@ -977,7 +987,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     PAYMENT_STATUS_STORAGE_KEY,
                     JSON.stringify({
                         paymentId: result.payment_id,
-                        ticketUserId: result.ticket_user_id,
+                        ticketRegistrationId,
                         createdAt: Date.now(),
                     }),
                 );
@@ -1058,11 +1068,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         let paymentSocketManuallyClosed = false;
         let paymentSocketReconnectAttempts = 0;
 
-        function getPaymentStatusApiUrl(paymentId, ticketUserId) {
+        function getPaymentStatusApiUrl(paymentId, ticketRegistrationId) {
             return (
                 `${API_BASE}/ticket-payments/` +
                 `${encodeURIComponent(paymentId)}/status` +
-                `?ticket_user_id=${encodeURIComponent(ticketUserId)}`
+                `?ticket_registration_id=${encodeURIComponent(ticketRegistrationId)}`
             );
         }
 
@@ -1083,25 +1093,33 @@ document.addEventListener("DOMContentLoaded", async () => {
             try {
                 const parsed = JSON.parse(storedValue);
                 const paymentId = Number(parsed?.paymentId);
-                const ticketUserId = Number(parsed?.ticketUserId);
+
+                const ticketRegistrationId = Number(
+                    parsed?.ticketRegistrationId ??
+                    parsed?.ticketUserId,
+                );
 
                 if (
                     !Number.isInteger(paymentId) ||
                     paymentId <= 0 ||
-                    !Number.isInteger(ticketUserId) ||
-                    ticketUserId <= 0
+                    !Number.isInteger(ticketRegistrationId) ||
+                    ticketRegistrationId <= 0
                 ) {
                     throw new Error("Invalid stored payment data");
                 }
 
                 return {
                     paymentId,
-                    ticketUserId,
+                    ticketRegistrationId,
                     createdAt: Number(parsed?.createdAt) || null,
                 };
             } catch (error) {
                 console.warn("Invalid stored payment data:", error);
-                localStorage.removeItem(PAYMENT_STATUS_STORAGE_KEY);
+
+                localStorage.removeItem(
+                    PAYMENT_STATUS_STORAGE_KEY,
+                );
+
                 return null;
             }
         }
@@ -1243,7 +1261,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const response = await fetch(
                     getPaymentStatusApiUrl(
                         storedPayment.paymentId,
-                        storedPayment.ticketUserId,
+                        storedPayment.ticketRegistrationId,
                     ),
                     {
                         method: "GET",
