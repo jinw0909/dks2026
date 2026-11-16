@@ -40,7 +40,7 @@ a {
 }
 
 .michroma-regular {
-    font-family: "Michroma", sans-serif;
+    font-family: "Michroma", sans-serif !important;
     font-weight: 400;
     font-style: normal;
 }
@@ -56,7 +56,11 @@ a {
     top: 0;
     z-index: 10;
 }
-
+.logo-image {
+    width: 202px;
+    height: 32px;
+    object-fit: contain;
+}
 /* .header-inner {
   min-height: 74px;
   display: flex;
@@ -83,11 +87,11 @@ a {
 
 .header-inner .brand img {
     max-width: 100%;
-    height: auto;
+    /*height: auto;*/
 }
 
 .brand {
-    display: block;
+    display: flex;
     align-items: center;
     gap: 9px;
     text-transform: uppercase;
@@ -127,7 +131,7 @@ a {
 
 .nav a {
     color: #a1b4c9;
-    font-family: Pretendard;
+    font-family: Michroma, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
@@ -3228,13 +3232,20 @@ body {
 /* =====================================
    Global scrollbar
 ===================================== */
+/* =====================================
+   Global scrollbar
+===================================== */
 
 :root {
     --scrollbar-track: #030506;
-    --scrollbar-thumb: rgba(18, 184, 213, 0.46);
-    --scrollbar-thumb-hover: rgba(18, 184, 213, 0.78);
-    --modal-scrollbar-thumb: rgba(120, 214, 235, 0.30);
-    --modal-scrollbar-thumb-hover: rgba(120, 214, 235, 0.62);
+    --scrollbar-gradient: linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #e7f9ff 45%,
+            #00b9ed 65%,
+            #0086c8 100%
+    );
+    --scrollbar-thumb: #00b9ed;
 }
 
 /* Firefox */
@@ -3255,12 +3266,50 @@ html::-webkit-scrollbar-track {
 html::-webkit-scrollbar-thumb {
     border: 2px solid var(--scrollbar-track);
     border-radius: 999px;
-    background: var(--scrollbar-thumb);
+    background: var(--scrollbar-gradient);
 }
 
 html::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover);
+    background: linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #b9edff 35%,
+            #00c8ff 65%,
+            #0078b8 100%
+    );
 }
+/*:root {*/
+/*    --scrollbar-track: #030506;*/
+/*    --scrollbar-thumb: rgba(18, 184, 213, 0.46);*/
+/*    --scrollbar-thumb-hover: rgba(18, 184, 213, 0.78);*/
+/*    --modal-scrollbar-thumb: rgba(120, 214, 235, 0.30);*/
+/*    --modal-scrollbar-thumb-hover: rgba(120, 214, 235, 0.62);*/
+/*}*/
+
+/*!* Firefox *!*/
+/*html {*/
+/*    scrollbar-width: thin;*/
+/*    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);*/
+/*}*/
+
+/*!* Chrome, Edge, Safari *!*/
+/*html::-webkit-scrollbar {*/
+/*    width: 9px;*/
+/*}*/
+
+/*html::-webkit-scrollbar-track {*/
+/*    background: var(--scrollbar-track);*/
+/*}*/
+
+/*html::-webkit-scrollbar-thumb {*/
+/*    border: 2px solid var(--scrollbar-track);*/
+/*    border-radius: 999px;*/
+/*    background: var(--scrollbar-thumb);*/
+/*}*/
+
+/*html::-webkit-scrollbar-thumb:hover {*/
+/*    background: var(--scrollbar-thumb-hover);*/
+/*}*/
 
 /* =====================================
    Modal viewport stabilization
@@ -5091,14 +5140,14 @@ body.modal-open {
 }
 
 .header-title {
-    font-size: 21px;
+    font-size: 18px;
     font-weight: 700 !important;
 }
 
 .wordmark {
     font-family: Arial, sans-serif;
     font-weight: 500;
-    letter-spacing: -.055em;
+    /*letter-spacing: -.055em;*/
     line-height: 1.1;
 }
 
