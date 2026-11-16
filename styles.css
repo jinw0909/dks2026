@@ -5199,7 +5199,7 @@ body.modal-open {
 
     .logo-image {
         width: clamp(130px, 25vw, 202px);
-        height: auto;
+        /*height: auto;*/
     }
 
     /* 오른쪽 AI x SOFTWAVE 로고 */
@@ -5231,13 +5231,13 @@ body.modal-open {
 
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        gap: 24px;
+        justify-content: safe center;
+        gap: clamp(16px, 4vw, 32px);
 
         width: 100%;
         min-width: 0;
-        margin-top: 16px;
-        padding: 12px 0;
+        margin: 0 !important;
+        padding: 12px 8px;
 
         overflow-x: auto;
         overflow-y: hidden;
