@@ -2294,4 +2294,30 @@ document.addEventListener("DOMContentLoaded", () => {
             "resize",
             requestVisibilityUpdate,
         );
+
+        // 상단 내비게이션 클릭 시에만 부드러운 스크롤 적용
+        document.querySelectorAll('.site-header .nav a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (event) => {
+                const hash = link.getAttribute('href');
+                const target = document.getElementById(hash.slice(1));
+
+                if (!target) return;
+
+                event.preventDefault();
+
+                const headerHeight =
+                    document.querySelector('.site-header')?.offsetHeight ?? 0;
+
+                const targetY =
+                    target.getBoundingClientRect().top + window.scrollY - headerHeight;
+
+                window.scrollTo({
+                    top: targetY,
+                    behavior: 'smooth'
+                });
+
+                history.pushState(null, '', hash);
+            });
+        });
+
     });
