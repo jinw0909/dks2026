@@ -2321,3 +2321,119 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     });
+
+
+
+/* ==========================================
+   Mobile Header Navigation
+========================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const menuButton = document.querySelector(".menu-toggle");
+    const mobileMenu = document.querySelector("#mobile-menu");
+    const desktopBreakpoint = window.matchMedia("(min-width: 1024px)");
+
+    if (!menuButton || !mobileMenu) return;
+
+    const main = document.querySelector("main");
+    const footer = document.querySelector("footer");
+
+    let previousFocus = null;
+
+    function setMenu(open, restoreFocus = false) {
+        if (open) {
+            previousFocus = document.activeElement;
+        }
+
+        mobileMenu.hidden = !open;
+        document.body.classList.toggle("menu-open", open);
+
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute(
+            "aria-label",
+            open ? "메뉴 닫기" : "메뉴 열기"
+        );
+
+        if (main) main.inert = open;
+        if (footer) footer.inert = open;
+
+        if (open) {
+            mobileMenu.querySelector("a")?.focus();
+        } else if (restoreFocus) {
+            if (previousFocus?.isConnected) {
+                previousFocus.focus();
+            } else {
+                menuButton.focus();
+            }
+        }
+    }
+
+    // 햄버거 버튼 클릭
+    menuButton.addEventListener("click", () => {
+        const isOpening = mobileMenu.hidden;
+        setMenu(isOpening, !isOpening);
+    });
+
+    // 모바일 메뉴 링크 클릭
+    mobileMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+            setMenu(false);
+
+            const hash = link.hash;
+            if (!hash) return;
+
+            const target = document.getElementById(
+                decodeURIComponent(hash.slice(1))
+            );
+
+            if (target) {
+                target.setAttribute("tabindex", "-1");
+
+                requestAnimationFrame(() => {
+                    target.focus({ preventScroll: true });
+                });
+            }
+        });
+    });
+
+    // ESC 및 Tab 키보드 처리
+    document.addEventListener("keydown", (event) => {
+        if (mobileMenu.hidden) return;
+
+        if (event.key === "Escape") {
+            setMenu(false, true);
+            return;
+        }
+
+        if (event.key !== "Tab") return;
+
+        const focusable = [
+            menuButton,
+            ...mobileMenu.querySelectorAll("a")
+        ];
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (
+            !event.shiftKey &&
+            document.activeElement === last
+        ) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
+
+    // PC 화면으로 전환 시 모바일 메뉴 닫기
+    desktopBreakpoint.addEventListener("change", (event) => {
+        if (event.matches) {
+            setMenu(false);
+        }
+    });
+});
+
+
+
