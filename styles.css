@@ -5539,3 +5539,8 @@ body.menu-open {
         border-bottom: 0;
     }
 }
+
+
+.speakerSwiper .speaker-card {
+    cursor: pointer;
+}

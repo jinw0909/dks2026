@@ -456,154 +456,44 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         }
 
-        function closeSpeakerModal() {
-            if (!modal?.classList.contains("is-open")) return;
+    function closeSpeakerModal() {
+        if (!modal?.classList.contains("is-open")) return;
 
-            // 모달이 사라지는 바로 그 순간 발생하는 메인 카드 mouseenter를 일시 차단합니다.
-            resolvingSpeakerHoverAfterModalClose = true;
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
 
-            modal.classList.remove("is-open");
-            modal.setAttribute("aria-hidden", "true");
-            mainSwiper?.autoplay?.start();
+        mainSwiper?.autoplay?.start();
 
-            unlockPageScroll();
+        unlockPageScroll();
 
-            if (lastFocusedElement instanceof HTMLElement) {
-                lastFocusedElement.focus({ preventScroll: true });
-            }
-
-            requestAnimationFrame(() => {
-                // 모달이 제거된 뒤 실제 커서 바로 아래에 있는 카드만 잠급니다.
-                // 커서가 카드 사이 여백에 있다면 잠금 대상이 없으므로 다음 카드 진입이 즉시 정상 동작합니다.
-                const elementBelowPointer = document.elementFromPoint(
-                    lastSpeakerPointerX,
-                    lastSpeakerPointerY,
-                );
-
-                suppressedSpeakerCardAfterModalClose =
-                    elementBelowPointer?.closest?.(".speaker-card") ?? null;
-                resolvingSpeakerHoverAfterModalClose = false;
-            });
+        if (lastFocusedElement instanceof HTMLElement) {
+            lastFocusedElement.focus({ preventScroll: true });
         }
+    }
 
-        const SPEAKER_HOVER_OPEN_DELAY_MS = 500;
-        let lastSpeakerPointerX = -1;
-        let lastSpeakerPointerY = -1;
-        let resolvingSpeakerHoverAfterModalClose = false;
-        let suppressedSpeakerCardAfterModalClose = null;
+    function bindMainCardEvents() {
+        document.querySelectorAll(".speaker-card").forEach((card) => {
+            const slide = card.closest(".speaker-slide");
+            const speakerId = slide?.dataset.speakerId;
 
-        document.addEventListener(
-            "pointermove",
-            (event) => {
-                lastSpeakerPointerX = event.clientX;
-                lastSpeakerPointerY = event.clientY;
-            },
-            { passive: true },
-        );
+            if (!speakerId) return;
 
-        function bindMainCardEvents() {
-            const canHover = window.matchMedia("(hover: hover)");
+            // 마우스 클릭 및 모바일 터치
+            card.addEventListener("click", () => {
+                if (mainSwiper?.allowClick === false) return;
 
-            document.querySelectorAll(".speaker-card").forEach((card) => {
-                const slide = card.closest(".speaker-slide");
-                const speakerId = slide?.dataset.speakerId;
-
-                if (!speakerId) return;
-
-                let hoverOpenTimer = null;
-                let isPointerPressed = false;
-                let suppressHoverUntilLeave = false;
-
-                const clearHoverOpenTimer = () => {
-                    if (hoverOpenTimer !== null) {
-                        window.clearTimeout(hoverOpenTimer);
-                        hoverOpenTimer = null;
-                    }
-                };
-
-                const scheduleHoverOpen = (event) => {
-                    const isRealMouse =
-                        event?.pointerType === "mouse" ||
-                        event?.type === "mouseenter";
-
-                    if (
-                        (!canHover.matches && !isRealMouse) ||
-                        isPointerPressed ||
-                        suppressHoverUntilLeave ||
-                        resolvingSpeakerHoverAfterModalClose ||
-                        suppressedSpeakerCardAfterModalClose === card ||
-                        modal?.classList.contains("is-open")
-                    ) {
-                        return;
-                    }
-
-                    clearHoverOpenTimer();
-                    hoverOpenTimer = window.setTimeout(() => {
-                        hoverOpenTimer = null;
-
-                        if (
-                            card.matches(":hover") &&
-                            !isPointerPressed &&
-                            !suppressHoverUntilLeave &&
-                            !resolvingSpeakerHoverAfterModalClose &&
-                            suppressedSpeakerCardAfterModalClose !== card
-                        ) {
-                            openSpeakerModal(speakerId, card);
-                        }
-                    }, SPEAKER_HOVER_OPEN_DELAY_MS);
-                };
-
-                // 실제 마우스 진입을 우선 사용한다.
-                // 브라우저가 pointer:fine을 잘못 판정해도 PC 마우스 호버가 동작한다.
-                card.addEventListener("pointerenter", scheduleHoverOpen);
-                card.addEventListener("mouseenter", scheduleHoverOpen);
-
-                card.addEventListener("pointerdown", () => {
-                    isPointerPressed = true;
-                    suppressHoverUntilLeave = true;
-                    clearHoverOpenTimer();
-                });
-
-                const releasePointer = () => {
-                    isPointerPressed = false;
-                    clearHoverOpenTimer();
-                };
-
-                card.addEventListener("pointerup", releasePointer);
-                card.addEventListener("pointercancel", releasePointer);
-
-                card.addEventListener("mouseleave", () => {
-                    isPointerPressed = false;
-                    suppressHoverUntilLeave = false;
-
-                    if (suppressedSpeakerCardAfterModalClose === card) {
-                        suppressedSpeakerCardAfterModalClose = null;
-                    }
-
-                    clearHoverOpenTimer();
-                });
-
-                // 모바일/태블릿처럼 hover가 없는 환경에서는 기존 탭 동작 유지
-                card.addEventListener("click", (event) => {
-                    const isMouseClick =
-                        event.detail > 0 &&
-                        window.matchMedia("(hover: hover)").matches;
-
-                    if (!isMouseClick) {
-                        openSpeakerModal(speakerId, card);
-                    }
-                });
-
-                // 키보드 접근성은 기존과 동일하게 유지
-                card.addEventListener("keydown", (event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        clearHoverOpenTimer();
-                        openSpeakerModal(speakerId, card);
-                    }
-                });
+                openSpeakerModal(speakerId, card);
             });
-        }
+
+            // 키보드 접근성 유지
+            card.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openSpeakerModal(speakerId, card);
+                }
+            });
+        });
+    }
 
         async function initializeSpeakers() {
             if (!speakerWrapper || !detailWrapper) return;
