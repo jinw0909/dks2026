@@ -1459,15 +1459,12 @@ html {
 
 .speakerSwiper,
 .speakerSwiper.swiper-grab-cursor,
-.speakerSwiper .speaker-slide,
-.speakerSwiper .speaker-card {
+.speakerSwiper .speaker-slide {
     cursor: default !important;
 }
 
-.speakerSwiper:active,
-.speakerSwiper .speaker-slide:active,
-.speakerSwiper .speaker-card:active {
-    cursor: default !important;
+.speakerSwiper .speaker-card {
+    cursor: pointer !important;
 }
 
 .speakerSwiper .swiper-slide.speaker-slide.swiper-slide-visible {
