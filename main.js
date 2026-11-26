@@ -2295,30 +2295,6 @@ document.addEventListener("DOMContentLoaded", () => {
             requestVisibilityUpdate,
         );
 
-        // 상단 내비게이션 클릭 시에만 부드러운 스크롤 적용
-        document.querySelectorAll('.site-header .nav a[href^="#"]').forEach(link => {
-            link.addEventListener('click', (event) => {
-                const hash = link.getAttribute('href');
-                const target = document.getElementById(hash.slice(1));
-
-                if (!target) return;
-
-                event.preventDefault();
-
-                const headerHeight =
-                    document.querySelector('.site-header')?.offsetHeight ?? 0;
-
-                const targetY =
-                    target.getBoundingClientRect().top + window.scrollY - headerHeight;
-
-                window.scrollTo({
-                    top: targetY,
-                    behavior: 'smooth'
-                });
-
-                history.pushState(null, '', hash);
-            });
-        });
 
     });
 
@@ -2435,5 +2411,74 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+/* ==========================================
+   Navigation Section Scroll
+========================================== */
+
+(() => {
+    function scrollToSection(targetId) {
+        const target = document.getElementById(targetId);
+
+        if (!target) return;
+
+        const headerHeight =
+            document.querySelector(".site-header")?.offsetHeight ?? 0;
+
+        const targetY =
+            target.getBoundingClientRect().top +
+            window.scrollY -
+            headerHeight;
+
+        target.setAttribute("tabindex", "-1");
+        target.focus({ preventScroll: true });
+
+        window.scrollTo({
+            top: targetY,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? "instant"
+                : "smooth"
+        });
+    }
+
+    // DAKS 내부 메뉴 이동
+    document.addEventListener("click", event => {
+        const link = event.target.closest("a[data-scroll-target]");
+
+        if (!link || event.defaultPrevented) return;
+
+        if (event.ctrlKey || event.metaKey ||
+            event.shiftKey || event.altKey) return;
+
+        event.preventDefault();
+        scrollToSection(link.dataset.scrollTarget);
+    });
+
+    // AI x SOFTWAVE에서 이동한 경우
+    window.addEventListener("load", () => {
+        const targetId = sessionStorage.getItem("pendingScrollTarget");
+
+        if (!targetId) return;
+
+        sessionStorage.removeItem("pendingScrollTarget");
+        scrollToSection(targetId);
+    });
+})();
 
 
+document.addEventListener("click", event => {
+    const link = event.target.closest("a[data-scroll-top]");
+
+    if (!link || event.defaultPrevented) return;
+
+    if (event.ctrlKey || event.metaKey ||
+        event.shiftKey || event.altKey) return;
+
+    event.preventDefault();
+
+    window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth"
+    });
+});
